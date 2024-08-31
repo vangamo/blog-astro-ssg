@@ -64,3 +64,15 @@ To pull changes into submodules:
 ```bash
 git submodule update --remote
 ```
+
+## Steps to create Astro project
+
+```bash
+pnpm create astro
+git commit -am "Initial"
+git remote add origin https://github.com/vangamo/blog-astro-ssr.git
+#git branch -m master main
+git branch --set-upstream-to=origin/main main
+git rebase
+git push
+```
