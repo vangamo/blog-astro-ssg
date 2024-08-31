@@ -51,3 +51,16 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 ```bash
 git submodule add https://github.com/vangamo/blog-content.git src/content
 ```
+
+When you clone the repositorio, you must run:
+
+```bash
+git submodule init
+git submodule update
+```
+
+To pull changes into submodules:
+
+```bash
+git submodule update --remote
+```
