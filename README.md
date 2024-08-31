@@ -45,3 +45,9 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Adding content repo as submodule
+
+```bash
+git submodule add https://github.com/vangamo/blog-content.git src/content
+```
