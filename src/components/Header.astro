@@ -1,36 +1,5 @@
 ---
-
-
-const getUrlParts = () => {
-  const pathParts = Astro.url.pathname.split('/').filter(part => part !== '');
-  console.log(Astro.url.pathname);
-  console.log(Astro.params);
-  if(Object.keys(Astro.params).length===0) {
-    if(pathParts.length===0) {
-      return {lang: 'es', path: '/'}
-    }
-    else if(pathParts.length===1 && pathParts[0]==='en') {
-      return {lang: 'en', path: '/'}
-    }
-    else if(pathParts.length===1 && pathParts[0]!=='en') {
-      return {lang: 'es', path: '/'+pathParts[0]}
-    }
-    else {
-      return {lang: pathParts[pathParts.length-1], path: pathParts[0]}
-    }
-  }
-  else {
-    if( !Astro.params.lang ) {
-      return {lang: 'es', path: Astro.url.pathname}
-    }
-    else {
-      return {lang: Astro.params.lang, path: '/'+pathParts.filter(part => part!==Astro.params.lang).join('/')}
-    }
-  }
-};
-
-console.log(getUrlParts())
-const {lang, path} = getUrlParts();
+const { lang, slug } = Astro.props;
 ---
 
 <header class="bg-background border-b">
@@ -40,10 +9,10 @@ const {lang, path} = getUrlParts();
       <span class="text-xl font-bold">vanGamo blog</span>
     </a>
     <nav class="hidden md:flex items-center gap-4">
-      <a href="/" class={(path==='/'?'':'underline ')+"text-sm font-medium hover:underline"}> Home </a>
-      <a href="/about/" class={(path.startsWith('/posts')?'':'underline ')+"text-sm font-medium hover:underline"}> Blog </a>
-      <a href="/about/" class={(path.startsWith('/about')?'':'underline ')+"text-sm font-medium hover:underline"}> About </a>
-      <a href="/about/" class={(path.startsWith('/contact')?'':'underline ')+"text-sm font-medium hover:underline"}>
+      <a href="/" class={(slug==='/'?'':'underline ')+"text-sm font-medium hover:underline"}> Home </a>
+      <a href="/about/" class={(slug.startsWith('/posts')?'':'underline ')+"text-sm font-medium hover:underline"}> Blog </a>
+      <a href="/about/" class={(slug.startsWith('/about')?'':'underline ')+"text-sm font-medium hover:underline"}> About </a>
+      <a href="/about/" class={(slug.startsWith('/contact')?'':'underline ')+"text-sm font-medium hover:underline"}>
         Contact
       </a>
       <p class="text-sm">
