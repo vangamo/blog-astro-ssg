@@ -1,0 +1,22 @@
+---
+export async function getStaticPaths() {
+  return [
+    {
+      params: {
+        slug: "state-of-css",
+      },
+    },
+    {
+      params: {
+        slug: "generated-link",
+      },
+    },
+  ];
+}
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout lang="es" slug="/links/">
+  Generated link post!
+</BaseLayout>
