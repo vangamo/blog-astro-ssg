@@ -50,6 +50,7 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 
 ```bash
 git submodule add https://github.com/vangamo/blog-content.git src/content
+git submodule add https://github.com/vangamo/blog-web-editor.git web-editor
 ```
 
 When you clone the repositorio, you must run:

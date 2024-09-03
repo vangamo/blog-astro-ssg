@@ -1,3 +1,6 @@
 [submodule "src/content"]
 	path = src/content
 	url = https://github.com/vangamo/blog-content.git
+[submodule "web-editor"]
+	path = web-editor
+	url = https://github.com/vangamo/blog-web-editor.git
