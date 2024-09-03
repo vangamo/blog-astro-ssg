@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const pageTitle = 'About me';
+---
+
+<BaseLayout pageTitle={pageTitle} lang="en" slug="/">
+  <div class="grid gap-4 mt-4">
+    <div class="grid gap-2">
+      <h2 class="text-2xl font-bold">{pageTitle}</h2>
+      <p class="text-muted-foreground">
+        I'm a Full-Stack engineer. I also have experience as software architect and I really love teaching my CS knowledge to others.
+      </p>
+    </div>
+    
+  <div class="grid gap-4 mt-4">
+    <div class="grid gap-2">
+      <h2 class="text-2xl font-bold">Popular Posts</h2>
+      <p class="text-muted-foreground">
+        Echa un vistazo a los post destacados de mi blog.
+      </p>
+    </div>
+    <div class="grid gap-4">
+      <div class="flex items-center gap-4">
+        <div
+          class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
+        >
+          1
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">
+            Unleash Your Creativity with Figma
+          </h3>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div>Jane Doe</div>
+            <div
+              data-orientation="vertical"
+              role="none"
+              class="shrink-0 bg-border h-full w-[1px]"
+              data-id="25"
+            >
+            </div>
+            <div>June 1, 2023</div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div
+          class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
+        >
+          2
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">
+            Mastering Responsive Design with CSS
+          </h3>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div>John Smith</div>
+            <div
+              data-orientation="vertical"
+              role="none"
+              class="shrink-0 bg-border h-full w-[1px]"
+              data-id="25"
+            >
+            </div>
+            <div>May 15, 2023</div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div
+          class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
+        >
+          3
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">
+            Exploring the Future of JavaScript
+          </h3>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div>Sarah Johnson</div>
+            <div
+              data-orientation="vertical"
+              role="none"
+              class="shrink-0 bg-border h-full w-[1px]"
+              data-id="25"
+            >
+            </div>
+            <div>April 30, 2023</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
