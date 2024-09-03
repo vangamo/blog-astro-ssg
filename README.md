@@ -77,3 +77,11 @@ git branch --set-upstream-to=origin/main main
 git rebase
 git push
 ```
+
+## Steps to add Tailwind to Astro
+
+```bash
+npx astro add tailwind
+```
+
+And follow the questions
