@@ -1,0 +1,54 @@
+---
+
+
+const getUrlParts = () => {
+  const pathParts = Astro.url.pathname.split('/').filter(part => part !== '');
+  console.log(Astro.url.pathname);
+  console.log(Astro.params);
+  if(Object.keys(Astro.params).length===0) {
+    if(pathParts.length===0) {
+      return {lang: 'es', path: '/'}
+    }
+    else if(pathParts.length===1 && pathParts[0]==='en') {
+      return {lang: 'en', path: '/'}
+    }
+    else if(pathParts.length===1 && pathParts[0]!=='en') {
+      return {lang: 'es', path: '/'+pathParts[0]}
+    }
+    else {
+      return {lang: pathParts[pathParts.length-1], path: pathParts[0]}
+    }
+  }
+  else {
+    if( !Astro.params.lang ) {
+      return {lang: 'es', path: Astro.url.pathname}
+    }
+    else {
+      return {lang: Astro.params.lang, path: '/'+pathParts.filter(part => part!==Astro.params.lang).join('/')}
+    }
+  }
+};
+
+console.log(getUrlParts())
+const {lang, path} = getUrlParts();
+---
+
+<header class="bg-background border-b">
+  <div class="container px-4 md:px-6 py-4 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      {/* <MountainIcon class="w-6 h-6" /> */}
+      <span class="text-xl font-bold">vanGamo blog</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-4">
+      <a href="/" class={(path==='/'?'':'underline ')+"text-sm font-medium hover:underline"}> Home </a>
+      <a href="/about/" class={(path.startsWith('/posts')?'':'underline ')+"text-sm font-medium hover:underline"}> Blog </a>
+      <a href="/about/" class={(path.startsWith('/about')?'':'underline ')+"text-sm font-medium hover:underline"}> About </a>
+      <a href="/about/" class={(path.startsWith('/contact')?'':'underline ')+"text-sm font-medium hover:underline"}>
+        Contact
+      </a>
+      <p class="text-sm">
+        <a href="/" class={(lang==='es'?'font-semibold ':'underline ')+"text-sm font-medium hover:underline"}>ES</a>/<a href="/en/" class={(lang==='en'?'font-semibold ':'underline ')+"text-sm font-medium hover:underline"}>EN</a>
+      </p>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,36 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Sidebar from '../components/Sidebar.astro';
+import '../styles/global.css';
+
+const { pageTitle } = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>My blog</title>
+  </head>
+  <body class="bg-background">
+    <div class="flex flex-col min-h-screen">
+      <Header />
+
+      <main
+        class="flex-1 container px-4 md:px-6 py-8 grid md:grid-cols-[3fr_1fr] gap-8"
+      >
+        <div class="space-y-8">
+          <slot />
+        </div>
+        <div class="space-y-8">
+          <Sidebar></Sidebar>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  </body>
+</html>
