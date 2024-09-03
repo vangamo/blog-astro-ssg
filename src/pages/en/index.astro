@@ -13,40 +13,77 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <div class="grid gap-6">
 
 
-        <div class="grid md:grid-cols-[200px_1fr] gap-4">
-          <img
-            src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=post`}
-            alt="Blog post cover"
-            width={200}
-            height={150}
-            class="rounded-lg object-cover"
-            style={{ aspectRatio: "200/150", objectFit: "cover" }}
-          />
-          <div class="space-y-2">
-            <h3 class="text-xl font-bold">
-              {"Title"}
-            </h3>
-            <div class="flex items-center gap-2 text-sm text-muted-foreground">
-              <div>{"vanGamo"}</div>
-              <div
-                data-orientation="vertical"
-                role="none"
-                class="shrink-0 bg-border h-full w-[1px]"
-                data-id="25"
-              >
-              </div>
-              <div>Ago 29, 2024</div>
+      <div class="grid md:grid-cols-[200px_1fr] gap-4">
+        <img
+          src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=post`}
+          alt="Blog post cover"
+          width={200}
+          height={150}
+          class="rounded-lg object-cover"
+          style={{ aspectRatio: "200/150", objectFit: "cover" }}
+        />
+        <div class="space-y-2">
+          <h3 class="text-xl font-bold">
+            {"State of CSS"}
+          </h3>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div>{"vanGamo"}</div>
+            <div
+              data-orientation="vertical"
+              role="none"
+              class="shrink-0 bg-border h-full w-[1px]"
+              data-id="25"
+            >
             </div>
-            <p class="text-muted-foreground line-clamp-3">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              euismod, nisl nec ultricies lacus, nisl nunc sollicitudin nisl, eget
-              aliquam nisl nisl sit amet nisl.
-            </p>
-            <a href="#" class="text-primary font-medium hover:underline">
-              Read more
-            </a>
+            <div>Ago 29, 2024</div>
           </div>
+          <p class="text-muted-foreground line-clamp-3">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            euismod, nisl nec ultricies lacus, nisl nunc sollicitudin nisl, eget
+            aliquam nisl nisl sit amet nisl.
+          </p>
+          <a href={"./links/state-of-css"} class="text-primary font-medium hover:underline">
+            Read more
+          </a>
         </div>
+      </div>
+
+
+
+      <div class="grid md:grid-cols-[200px_1fr] gap-4">
+        <img
+          src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=post`}
+          alt="Blog post cover"
+          width={200}
+          height={150}
+          class="rounded-lg object-cover"
+          style={{ aspectRatio: "200/150", objectFit: "cover" }}
+        />
+        <div class="space-y-2">
+          <h3 class="text-xl font-bold">
+            {"Generated link post"}
+          </h3>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div>{"vanGamo"}</div>
+            <div
+              data-orientation="vertical"
+              role="none"
+              class="shrink-0 bg-border h-full w-[1px]"
+              data-id="25"
+            >
+            </div>
+            <div>Ago 29, 2024</div>
+          </div>
+          <p class="text-muted-foreground line-clamp-3">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            euismod, nisl nec ultricies lacus, nisl nunc sollicitudin nisl, eget
+            aliquam nisl nisl sit amet nisl.
+          </p>
+          <a href={"./links/generated-link"} class="text-primary font-medium hover:underline">
+            Read more
+          </a>
+        </div>
+      </div>
 
 
   </div>

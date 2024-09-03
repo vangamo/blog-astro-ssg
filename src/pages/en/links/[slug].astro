@@ -14,10 +14,10 @@ export async function getStaticPaths() {
   ];
 }
 
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const pageTitle = 'Link generado!';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+const pageTitle = 'Generated link post!';
 ---
 
-<BaseLayout pageTitle={pageTitle} lang="es" slug="/links/">
+<BaseLayout pageTitle={pageTitle} lang="en" slug="/links/">
   {pageTitle}
 </BaseLayout>
