@@ -5,6 +5,13 @@ import { getCollection } from "astro:content";
 const links = await getCollection("links").then((links) =>
   links.filter((entry) => entry.id.startsWith("es-"))
 );
+console.log(links);
+
+const posts = await getCollection("posts").then((posts) =>
+  posts.filter((entry) => entry.id.startsWith("es-"))
+);
+
+const contents = [...posts, ...links];
 ---
 
 <BaseLayout lang="es" slug="/">
@@ -17,10 +24,10 @@ const links = await getCollection("links").then((links) =>
     </div>
     <div class="grid gap-6">
       {
-        links.map((linkPost) => (
+        contents.map((content) => (
           <div class="grid md:grid-cols-[200px_1fr] gap-4">
             <img
-              src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${linkPost.data.title.substring(0,linkPost.data.title.indexOf(' '))}`}
+              src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${content.data.title.substring(0, content.data.title.indexOf(" "))}`}
               alt="Blog post cover"
               width={200}
               height={150}
@@ -28,15 +35,15 @@ const links = await getCollection("links").then((links) =>
               style={{ aspectRatio: "200/150", objectFit: "cover" }}
             />
             <div class="space-y-2">
-              <h3 class="text-xl font-bold">{linkPost.data.title}</h3>
+              <h3 class="text-xl font-bold">{content.data.title}</h3>
               <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                <div>{linkPost.data.author}</div>
+                <div>{content.data.author}</div>
                 <div
                   data-orientation="vertical"
                   role="none"
                   class="shrink-0 bg-border h-full w-[1px]"
                   data-id="25"
-                ></div>
+                />
                 <div>Ago 29, 2024</div>
               </div>
               <p class="text-muted-foreground line-clamp-3">
@@ -45,7 +52,7 @@ const links = await getCollection("links").then((links) =>
                 eget aliquam nisl nisl sit amet nisl.
               </p>
               <a
-                href={"./links/" + linkPost.id.substring(3) + "/"}
+                href={"./" + content.collection + "/" + content.id.substring(3) + "/"}
                 class="text-primary font-medium hover:underline"
               >
                 Read more

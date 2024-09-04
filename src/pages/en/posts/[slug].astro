@@ -1,0 +1,24 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+
+  return posts
+    .filter( entry => entry.id.startsWith('en-'))
+    .map(entry => ({
+      params: {
+        slug: entry.id.substring(3)
+      }
+  }))
+}
+
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const entry = await getEntry('posts', 'en-'+Astro.params.slug);
+const {Content} = await render(entry);
+---
+
+<BaseLayout pageTitle={entry.data.title} lang="en" slug="/posts/">
+  <Content />
+</BaseLayout>
