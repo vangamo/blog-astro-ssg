@@ -1,5 +1,10 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const links = await getCollection("links").then((links) =>
+  links.filter((entry) => entry.id.startsWith("en-"))
+);
 ---
 
 <BaseLayout lang="en" slug="/">
@@ -11,159 +16,123 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
     </div>
     <div class="grid gap-6">
-
-
-      <div class="grid md:grid-cols-[200px_1fr] gap-4">
-        <img
-          src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=post`}
-          alt="Blog post cover"
-          width={200}
-          height={150}
-          class="rounded-lg object-cover"
-          style={{ aspectRatio: "200/150", objectFit: "cover" }}
-        />
-        <div class="space-y-2">
-          <h3 class="text-xl font-bold">
-            {"State of CSS"}
-          </h3>
-          <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <div>{"vanGamo"}</div>
-            <div
-              data-orientation="vertical"
-              role="none"
-              class="shrink-0 bg-border h-full w-[1px]"
-              data-id="25"
-            >
+      {
+        links.map((linkPost) => (
+          <div class="grid md:grid-cols-[200px_1fr] gap-4">
+            <img
+              src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${linkPost.data.title.substring(0, linkPost.data.title.indexOf(" "))}`}
+              alt="Blog post cover"
+              width={200}
+              height={150}
+              class="rounded-lg object-cover"
+              style={{ aspectRatio: "200/150", objectFit: "cover" }}
+            />
+            <div class="space-y-2">
+              <h3 class="text-xl font-bold">{linkPost.data.title}</h3>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div>{linkPost.data.author}</div>
+                <div
+                  data-orientation="vertical"
+                  role="none"
+                  class="shrink-0 bg-border h-full w-[1px]"
+                  data-id="25"
+                />
+                <div>Ago 29, 2024</div>
+              </div>
+              <p class="text-muted-foreground line-clamp-3">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                euismod, nisl nec ultricies lacus, nisl nunc sollicitudin nisl,
+                eget aliquam nisl nisl sit amet nisl.
+              </p>
+              <a
+                href={"./links/" + linkPost.id.substring(3) + "/"}
+                class="text-primary font-medium hover:underline"
+              >
+                Read more
+              </a>
             </div>
-            <div>Ago 29, 2024</div>
           </div>
-          <p class="text-muted-foreground line-clamp-3">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            euismod, nisl nec ultricies lacus, nisl nunc sollicitudin nisl, eget
-            aliquam nisl nisl sit amet nisl.
-          </p>
-          <a href={"./links/state-of-css"} class="text-primary font-medium hover:underline">
-            Read more
-          </a>
-        </div>
-      </div>
-
-
-
-      <div class="grid md:grid-cols-[200px_1fr] gap-4">
-        <img
-          src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=post`}
-          alt="Blog post cover"
-          width={200}
-          height={150}
-          class="rounded-lg object-cover"
-          style={{ aspectRatio: "200/150", objectFit: "cover" }}
-        />
-        <div class="space-y-2">
-          <h3 class="text-xl font-bold">
-            {"Generated link post"}
-          </h3>
-          <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <div>{"vanGamo"}</div>
-            <div
-              data-orientation="vertical"
-              role="none"
-              class="shrink-0 bg-border h-full w-[1px]"
-              data-id="25"
-            >
-            </div>
-            <div>Ago 29, 2024</div>
-          </div>
-          <p class="text-muted-foreground line-clamp-3">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            euismod, nisl nec ultricies lacus, nisl nunc sollicitudin nisl, eget
-            aliquam nisl nisl sit amet nisl.
-          </p>
-          <a href={"./links/generated-link"} class="text-primary font-medium hover:underline">
-            Read more
-          </a>
-        </div>
-      </div>
-
-
-  </div>
-  <div class="grid gap-4">
-    <div class="grid gap-2">
-      <h2 class="text-2xl font-bold">Popular Posts</h2>
-      <p class="text-muted-foreground">
-        Check out the most popular articles from our blog.
-      </p>
+        ))
+      }
     </div>
     <div class="grid gap-4">
-      <div class="flex items-center gap-4">
-        <div
-          class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-        >
-          1
-        </div>
-        <div class="space-y-1">
-          <h3 class="text-lg font-medium">
-            Unleash Your Creativity with Figma
-          </h3>
-          <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <div>Jane Doe</div>
-            <div
-              data-orientation="vertical"
-              role="none"
-              class="shrink-0 bg-border h-full w-[1px]"
-              data-id="25"
-            >
+      <div class="grid gap-2">
+        <h2 class="text-2xl font-bold">Popular Posts</h2>
+        <p class="text-muted-foreground">
+          Check out the most popular articles from our blog.
+        </p>
+      </div>
+      <div class="grid gap-4">
+        <div class="flex items-center gap-4">
+          <div
+            class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
+          >
+            1
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-lg font-medium">
+              Unleash Your Creativity with Figma
+            </h3>
+            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+              <div>Jane Doe</div>
+              <div
+                data-orientation="vertical"
+                role="none"
+                class="shrink-0 bg-border h-full w-[1px]"
+                data-id="25"
+              >
+              </div>
+              <div>June 1, 2023</div>
             </div>
-            <div>June 1, 2023</div>
           </div>
         </div>
-      </div>
-      <div class="flex items-center gap-4">
-        <div
-          class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-        >
-          2
-        </div>
-        <div class="space-y-1">
-          <h3 class="text-lg font-medium">
-            Mastering Responsive Design with CSS
-          </h3>
-          <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <div>John Smith</div>
-            <div
-              data-orientation="vertical"
-              role="none"
-              class="shrink-0 bg-border h-full w-[1px]"
-              data-id="25"
-            >
+        <div class="flex items-center gap-4">
+          <div
+            class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
+          >
+            2
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-lg font-medium">
+              Mastering Responsive Design with CSS
+            </h3>
+            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+              <div>John Smith</div>
+              <div
+                data-orientation="vertical"
+                role="none"
+                class="shrink-0 bg-border h-full w-[1px]"
+                data-id="25"
+              >
+              </div>
+              <div>May 15, 2023</div>
             </div>
-            <div>May 15, 2023</div>
           </div>
         </div>
-      </div>
-      <div class="flex items-center gap-4">
-        <div
-          class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-        >
-          3
-        </div>
-        <div class="space-y-1">
-          <h3 class="text-lg font-medium">
-            Exploring the Future of JavaScript
-          </h3>
-          <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <div>Sarah Johnson</div>
-            <div
-              data-orientation="vertical"
-              role="none"
-              class="shrink-0 bg-border h-full w-[1px]"
-              data-id="25"
-            >
+        <div class="flex items-center gap-4">
+          <div
+            class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
+          >
+            3
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-lg font-medium">
+              Exploring the Future of JavaScript
+            </h3>
+            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+              <div>Sarah Johnson</div>
+              <div
+                data-orientation="vertical"
+                role="none"
+                class="shrink-0 bg-border h-full w-[1px]"
+                data-id="25"
+              >
+              </div>
+              <div>April 30, 2023</div>
             </div>
-            <div>April 30, 2023</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</BaseLayout>
+  </div></BaseLayout
+>
