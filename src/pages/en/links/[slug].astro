@@ -1,23 +1,24 @@
 ---
+import { getCollection, getEntry, render } from 'astro:content';
+
 export async function getStaticPaths() {
-  return [
-    {
+  const links = await getCollection('links');
+
+  return links
+    .filter( entry => entry.id.startsWith('en-'))
+    .map(entry => ({
       params: {
-        slug: "state-of-css",
-      },
-    },
-    {
-      params: {
-        slug: "generated-link",
-      },
-    },
-  ];
+        slug: entry.id.substring(3)
+      }
+  }))
 }
 
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-const pageTitle = 'Generated link post!';
+
+const entry = await getEntry('links', 'en-'+Astro.params.slug);
+const {Content} = await render(entry);
 ---
 
-<BaseLayout pageTitle={pageTitle} lang="en" slug="/links/">
-  {pageTitle}
+<BaseLayout pageTitle={entry.data.title} lang="en" slug="/links/">
+  <Content />
 </BaseLayout>
