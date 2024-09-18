@@ -60,6 +60,20 @@ git submodule init
 git submodule update
 ```
 
+Installing into WSL
+
+Add dev-dependency
+```
+pnpm i -D typescript@">=5.0.2 <6.0.0"
+```
+
+And add an .npmrc into root directory with:
+
+```ini
+node-linker=hoisted
+```
+
+
 To pull changes into submodules:
 
 ```bash
