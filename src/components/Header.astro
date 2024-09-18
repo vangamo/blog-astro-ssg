@@ -1,4 +1,6 @@
 ---
+import Logo from '../images/logo.webp';
+
 const { lang, slug } = Astro.props;
 
 const pathPrefix = lang==='es'?'':'/'+lang;
@@ -7,8 +9,8 @@ const pathPrefix = lang==='es'?'':'/'+lang;
 <header class="bg-background border-b">
   <div class="container px-4 md:px-6 py-4 flex items-center justify-between">
     <a href={pathPrefix+"/"} class="flex items-center gap-2">
-      {/* <MountainIcon class="w-6 h-6" /> */}
-      <span class="text-xl font-bold">vanGamo blog</span>
+      <img class="w-6 h-6" src={Logo.src} alt="Blog logo showing v and G letters" />
+      <h1 class="text-xl font-bold">vanGamo blog</h1>
     </a>
     <nav class="hidden md:flex items-center gap-4">
       <a href={pathPrefix+"/"} class={(slug==='/'?'':'underline ')+"text-sm font-medium hover:underline"}> Home </a>
