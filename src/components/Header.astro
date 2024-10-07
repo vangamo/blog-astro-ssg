@@ -6,6 +6,22 @@ import Logo from '../images/logo.webp';
 const { slug } = Astro.props;
 
 const locale = Astro.currentLocale;
+console.log(locale);
+
+const t = {
+  'es': {
+    'menu.item.Home': 'Home',
+    'menu.item.Blog': 'Blog',
+    'menu.item.About': 'Sobre mí',
+    'menu.item.Contact': 'Contacto',
+  },
+  'en': {
+    'menu.item.Home': 'Home',
+    'menu.item.Blog': 'Blog',
+    'menu.item.About': 'About',
+    'menu.item.Contact': 'Contact',
+  }
+}[locale];
 
 ---
 
@@ -13,14 +29,14 @@ const locale = Astro.currentLocale;
   <div class="container px-4 md:px-6 py-4 flex items-center justify-between">
     <a href={getAbsoluteLocaleUrl(locale, '/')} class="flex items-center gap-2">
       <img class="w-6 h-6" src={Logo.src} alt="Blog logo showing v and G letters" />
-      <h1 class="text-xl font-bold">vanGamo blog</h1>
+      <h1 class="text-xl font-bold">vanGamo blog</h1> {locale}
     </a>
     <nav class="hidden md:flex items-center gap-4">
-      <a href={getAbsoluteLocaleUrl(locale, '/')} class={(slug==='/'?'':'underline ')+"text-sm font-medium hover:underline"}> Home </a>
-      <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/posts')?'':'underline ')+"text-sm font-medium hover:underline"}> Blog </a>
-      <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/about')?'':'underline ')+"text-sm font-medium hover:underline"}> About </a>
+      <a href={getAbsoluteLocaleUrl(locale, '/')} class={(slug==='/'?'':'underline ')+"text-sm font-medium hover:underline"}> {t['menu.item.Home']} </a>
+      <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/posts')?'':'underline ')+"text-sm font-medium hover:underline"}> {t['menu.item.Blog']} </a>
+      <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/about')?'':'underline ')+"text-sm font-medium hover:underline"}> {t['menu.item.About']} </a>
       <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/contact')?'':'underline ')+"text-sm font-medium hover:underline"}>
-        Contact
+        {t['menu.item.Contact']}
       </a>
       <p class="text-sm">
         <a href={getAbsoluteLocaleUrl('es', '/')} class={(locale==='es'?'font-semibold ':'underline ')+"text-sm font-medium hover:underline"}>ES</a>/<a href={getAbsoluteLocaleUrl('en', '/')} class={(locale==='en'?'font-semibold ':'underline ')+"text-sm font-medium hover:underline"}>EN</a>
