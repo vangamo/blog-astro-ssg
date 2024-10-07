@@ -3,12 +3,20 @@
     "menu.item.Home": "Home",
     "menu.item.Blog": "Blog",
     "menu.item.About": "Sobre mí",
-    "menu.item.Contact": "Contacto"
+    "menu.item.Contact": "Contacto",
+    "sidebar.Categories": "Categorías",
+    "sidebar.Tags": "Tags",
+    "sidebar.Search": "Búsqueda",
+    "sidebar.Search.placeholder": "Busca en el contenido..."
   },
   "en": {
     "menu.item.Home": "Home",
     "menu.item.Blog": "Blog",
     "menu.item.About": "About",
-    "menu.item.Contact": "Contact"
+    "menu.item.Contact": "Contact",
+    "sidebar.Categories": "Categories",
+    "sidebar.Tags": "Tags",
+    "sidebar.Search": "Search",
+    "sidebar.Search.placeholder": "Search blog posts..."
   }
 }
