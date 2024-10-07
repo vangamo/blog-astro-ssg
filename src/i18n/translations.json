@@ -1,0 +1,14 @@
+{
+  "es": {
+    "menu.item.Home": "Home",
+    "menu.item.Blog": "Blog",
+    "menu.item.About": "Sobre mí",
+    "menu.item.Contact": "Contacto"
+  },
+  "en": {
+    "menu.item.Home": "Home",
+    "menu.item.Blog": "Blog",
+    "menu.item.About": "About",
+    "menu.item.Contact": "Contact"
+  }
+}

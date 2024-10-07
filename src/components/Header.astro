@@ -1,27 +1,11 @@
 ---
 import { getAbsoluteLocaleUrl } from 'astro:i18n';
-
+import translations from '../i18n/translations.json';
 import Logo from '../images/logo.webp';
 
 const { slug } = Astro.props;
-
 const locale = Astro.currentLocale;
-console.log(locale);
-
-const t = {
-  'es': {
-    'menu.item.Home': 'Home',
-    'menu.item.Blog': 'Blog',
-    'menu.item.About': 'Sobre mí',
-    'menu.item.Contact': 'Contacto',
-  },
-  'en': {
-    'menu.item.Home': 'Home',
-    'menu.item.Blog': 'Blog',
-    'menu.item.About': 'About',
-    'menu.item.Contact': 'Contact',
-  }
-}[locale];
+const t = translations[locale];
 
 ---
 
