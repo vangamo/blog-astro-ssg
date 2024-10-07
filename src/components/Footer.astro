@@ -1,16 +1,21 @@
 ---
+import translations from '../i18n/translations.json';
 
+const locale = Astro.currentLocale;
+const t = translations[locale];
+
+const currentYear = (new Date()).getFullYear();
 ---
 
 <footer class="bg-muted border-t">
   <div class="container px-4 md:px-6 py-6 flex items-center justify-between">
     <p class="text-sm text-muted-foreground">
-      &copy; 2024 vanGamo blog. All rights reserved.
+      &copy; {currentYear} vanGamo blog. {t['footer.copy.AllRights']}
     </p>
     <nav class="flex items-center gap-4">
-      <a href="#" class="text-sm hover:underline"> Terms </a>
-      <a href="#" class="text-sm hover:underline"> Privacy </a>
-      <a href="#" class="text-sm hover:underline"> Contact </a>
+      <a href="#" class="text-sm hover:underline"> {t['menu.item.Terms']} </a>
+      <a href="#" class="text-sm hover:underline"> {t['menu.item.Privacy']} </a>
+      <a href="#" class="text-sm hover:underline"> {t['menu.item.Contact']} </a>
     </nav>
   </div>
 </footer>
