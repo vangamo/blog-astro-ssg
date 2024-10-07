@@ -1,11 +1,11 @@
 ---
-import { getLocaleByPath, getAbsoluteLocaleUrl } from 'astro:i18n';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
 
 import Logo from '../images/logo.webp';
 
-const { lang, slug } = Astro.props;
+const { slug } = Astro.props;
 
-const locale = getLocaleByPath(lang);
+const locale = Astro.currentLocale;
 
 ---
 
