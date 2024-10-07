@@ -1,26 +1,29 @@
 ---
+import { getLocaleByPath, getAbsoluteLocaleUrl } from 'astro:i18n';
+
 import Logo from '../images/logo.webp';
 
 const { lang, slug } = Astro.props;
 
-const pathPrefix = lang==='es'?'':'/'+lang;
+const locale = getLocaleByPath(lang);
+
 ---
 
 <header class="bg-background border-b">
   <div class="container px-4 md:px-6 py-4 flex items-center justify-between">
-    <a href={pathPrefix+"/"} class="flex items-center gap-2">
+    <a href={getAbsoluteLocaleUrl(locale, '/')} class="flex items-center gap-2">
       <img class="w-6 h-6" src={Logo.src} alt="Blog logo showing v and G letters" />
       <h1 class="text-xl font-bold">vanGamo blog</h1>
     </a>
     <nav class="hidden md:flex items-center gap-4">
-      <a href={pathPrefix+"/"} class={(slug==='/'?'':'underline ')+"text-sm font-medium hover:underline"}> Home </a>
-      <a href={pathPrefix+"/about/"} class={(slug.startsWith('/posts')?'':'underline ')+"text-sm font-medium hover:underline"}> Blog </a>
-      <a href={pathPrefix+"/about/"} class={(slug.startsWith('/about')?'':'underline ')+"text-sm font-medium hover:underline"}> About </a>
-      <a href={pathPrefix+"/about/"} class={(slug.startsWith('/contact')?'':'underline ')+"text-sm font-medium hover:underline"}>
+      <a href={getAbsoluteLocaleUrl(locale, '/')} class={(slug==='/'?'':'underline ')+"text-sm font-medium hover:underline"}> Home </a>
+      <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/posts')?'':'underline ')+"text-sm font-medium hover:underline"}> Blog </a>
+      <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/about')?'':'underline ')+"text-sm font-medium hover:underline"}> About </a>
+      <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/contact')?'':'underline ')+"text-sm font-medium hover:underline"}>
         Contact
       </a>
       <p class="text-sm">
-        <a href="/" class={(lang==='es'?'font-semibold ':'underline ')+"text-sm font-medium hover:underline"}>ES</a>/<a href="/en/" class={(lang==='en'?'font-semibold ':'underline ')+"text-sm font-medium hover:underline"}>EN</a>
+        <a href={getAbsoluteLocaleUrl('es', '/')} class={(locale==='es'?'font-semibold ':'underline ')+"text-sm font-medium hover:underline"}>ES</a>/<a href={getAbsoluteLocaleUrl('en', '/')} class={(locale==='en'?'font-semibold ':'underline ')+"text-sm font-medium hover:underline"}>EN</a>
       </p>
     </nav>
   </div>
