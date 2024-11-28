@@ -18,6 +18,7 @@ const generateId = ({entry, base, data}) => {
 const links = defineCollection({
   // The ID is a slug generated from the path of the file relative to `base`
   loader: glob({ pattern: "**/!(README).md", base: "./content/links", generateId: generateId }),
+  type: 'content', /* they'll be Markdown files ('data' for yaml files) */
   schema: z.object({
     title: z.string(),
     author: z.string(),

@@ -12,6 +12,16 @@ const posts = await getCollection("posts").then((posts) =>
 );
 
 const contents = [...posts, ...links];
+
+const tagsCount = {};
+contents.forEach((content) => {
+  content.data.tags.forEach((tag) => {
+    if (!tagsCount[tag]) tagsCount[tag] = new Set();
+    tagsCount[tag].add(content.id);
+  });
+});
+
+const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
 ---
 
 <BaseLayout lang="es" slug="/">
@@ -22,6 +32,7 @@ const contents = [...posts, ...links];
         Check out the latest articles from our blog.
       </p>
     </div>
+    {tags.map(t => <li>{t}</li>)}
     <div class="grid gap-6">
       {
         contents.map((content) => (
