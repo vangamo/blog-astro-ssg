@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const userLang = Astro.currentLocale || 'es';
+const userLang = Astro.currentLocale || 'en';
 
 const getAllCollectionEntries = (collectionName) => {
   return getCollection(collectionName).then(entries => {
@@ -57,43 +57,22 @@ contents.forEach((content) => {
 });
 
 const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
-
-const renderDate = (completeDate) => {
-  const MONTHS = {
-    '01': 'enero', '02': 'febrero', '03': 'marzo', '04': 'abril', '05': 'mayo', '06': 'junio', '07': 'julio', '08': 'agosto', '09': 'septiembre', '10': 'octubre', '11': 'noviembre', '12': 'diciembre'
-  };
-  const [date, time] = completeDate.split(' ');
-  const [year, month, day] = date.split('.');
-
-  const dayNumber = parseInt(day, 10);
-
-  return `${dayNumber} de ${MONTHS[month]} de ${year}`;
-};
-
-const renderImgSrc = (imageData, title) => {
-  if( !imageData?.url ) {
-    return `https://placehold.co/400x400/999999/dddddd?font=mono&text=${title.substring(0, title.indexOf(' '))}`;
-  }
-
-  return imageData.url;
-}
-
 ---
 
 <BaseLayout slug="/">
   <div class="grid gap-4 mt-4">
     <div class="grid gap-2">
-      <h2 class="text-2xl font-bold">Últimos posts</h2>
+      <h2 class="text-2xl font-bold">Latest posts</h2>
       <p class="text-muted-foreground">
-        Echa un vistazo a los últimos articulos del blog.
+        Check out the latest articles from the blog.
       </p>
     </div>
     <div class="grid gap-6">
       {
-        contents.slice(0, 4).map((content) => (
+      contents.slice(0, 4).map((content) => (
           <div class="grid md:grid-cols-[200px_1fr] gap-4">
             <img
-              src={renderImgSrc(content.data.image, content.data.title)}
+              src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${content.data.title.substring(0, content.data.title.indexOf(' '))}`}
               alt="Blog post cover"
               width={200}
               height={150}
@@ -110,13 +89,13 @@ const renderImgSrc = (imageData, title) => {
                   class="shrink-0 bg-border h-full w-[1px]"
                   data-id="25"
                 />
-                <div>{renderDate(content.data.date.created)}</div>
+                <div>Ago 29, 2024</div>
               </div>
               <p class="text-muted-foreground line-clamp-3">
                 {content.data.brief}
               </p>
               <a
-                href={'./' + content.collection + '/' + content.data.slug + '/'}
+                href={'./' + content.collection + '/' + content.id.substring(3) + '/'}
                 class="text-primary font-medium hover:underline"
               >
                 Read more

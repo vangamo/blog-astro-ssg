@@ -1,0 +1,28 @@
+{
+  "es": {
+    "menu.item.Home": "Home",
+    "menu.item.Blog": "Blog",
+    "menu.item.About": "Sobre mí",
+    "menu.item.Contact": "Contacto",
+    "menu.item.Terms": "Condiciones de uso",
+    "menu.item.Privacy": "Política de privacidad",
+    "sidebar.Categories": "Categorías",
+    "sidebar.Tags": "Tags",
+    "sidebar.Search": "Búsqueda",
+    "sidebar.Search.placeholder": "Busca en el contenido...",
+    "footer.copy.AllRights": "Todos los derechos reservados."
+  },
+  "en": {
+    "menu.item.Home": "Home",
+    "menu.item.Blog": "Blog",
+    "menu.item.About": "About",
+    "menu.item.Contact": "Contact",
+    "menu.item.Terms": "Terms",
+    "menu.item.Privacy": "Privacy",
+    "sidebar.Categories": "Categories",
+    "sidebar.Tags": "Tags",
+    "sidebar.Search": "Search",
+    "sidebar.Search.placeholder": "Search blog posts...",
+    "footer.copy.AllRights": "All rights reserved."
+  }
+}
