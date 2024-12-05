@@ -4,18 +4,18 @@ import { glob } from 'astro/loaders';
 const generateId = ({ entry, base, data }) => {
   const entryParts = entry.split('.');
 
-  if (entryParts.length === 0 || entryParts.length === 0) {
+  const slug = entryParts.at(0);
+  const lang = entryParts.at(-2);
+  const extension = entryParts.at(-1);
+
+  if (entryParts.length === 0 || entryParts.length === 1 || extension !== 'md') {
     return 'unknown';
   } else if (entryParts.length === 2) {
-    return 'es-' + entryParts[0];
+    return 'es-' + slug;
+  } else if (['es', 'en'].includes(lang)) {
+    return lang + '-' + entryParts.slice(0, -2).join('.');
   } else {
-    const lastPart = entryParts.at(-2);
-
-    if (['es', 'en'].includes(lastPart)) {
-      return entryParts.at(-2) + '-' + entryParts.slice(0, -2).join('.');
-    } else {
-      return 'es-' + entryParts.join('.');
-    }
+    return 'es-' + entryParts.slice(0, -1).join('.');
   }
 };
 
