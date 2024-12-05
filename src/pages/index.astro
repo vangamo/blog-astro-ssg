@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
+const userLang = Astro.currentLocale || 'es';
+
 const getAllCollectionEntries = (collectionName) => {
   return getCollection(collectionName).then(entries => {
     entries.forEach(entry => {
@@ -16,19 +18,20 @@ const getAllCollectionEntries = (collectionName) => {
   });
 }
 
-const getAllLinks = async () => {
+const getAllLinks = async (lang) => {
+  console.log(lang);
   return await getAllCollectionEntries('links').then((links) =>
-      links.filter((entry) => entry.data.lang === 'es')
+      links.filter((entry) => entry.data.lang === lang)
   );
 };
-const getAllPosts = async () => {
+const getAllPosts = async (lang) => {
   return await getAllCollectionEntries('posts').then((posts) =>
-    posts.filter((entry) => entry.data.lang === 'es')
+    posts.filter((entry) => entry.data.lang === lang)
   )
 };
 
-const links = await getAllLinks();
-const posts = await getAllPosts();
+const links = await getAllLinks(userLang);
+const posts = await getAllPosts(userLang);
 
 const contents = [...posts, ...links];
 
@@ -43,7 +46,7 @@ contents.forEach((content) => {
 const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
 ---
 
-<BaseLayout lang="es" slug="/">
+<BaseLayout lang={userLang} slug="/">
   <div class="grid gap-4 mt-4">
     <div class="grid gap-2">
       <h2 class="text-2xl font-bold">Latest Posts</h2>

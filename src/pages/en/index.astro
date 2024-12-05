@@ -2,17 +2,51 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const links = await getCollection('links').then((links) =>
-  links.filter((entry) => entry.id.startsWith('en-'))
-);
-const posts = await getCollection('posts').then((posts) =>
-    posts.filter((entry) => entry.id.startsWith('en-'))
-);
+const userLang = Astro.currentLocale || 'en';
+
+const getAllCollectionEntries = (collectionName) => {
+  return getCollection(collectionName).then(entries => {
+    entries.forEach(entry => {
+      const [lang, ...slug] = entry.id.split('-');
+      entry.data = {
+        ...entry.data,
+        lang,
+        slug: slug.join('-')
+      };
+    });
+    return entries;
+  });
+}
+
+const getAllLinks = async (lang) => {
+  console.log(lang);
+  return await getAllCollectionEntries('links').then((links) =>
+      links.filter((entry) => entry.data.lang === lang)
+  );
+};
+const getAllPosts = async (lang) => {
+  return await getAllCollectionEntries('posts').then((posts) =>
+    posts.filter((entry) => entry.data.lang === lang)
+  )
+};
+
+const links = await getAllLinks(userLang);
+const posts = await getAllPosts(userLang);
 
 const contents = [...posts, ...links];
+
+const tagsCount = {};
+contents.forEach((content) => {
+  content.data.tags.forEach((tag) => {
+    if (!tagsCount[tag]) tagsCount[tag] = new Set();
+    tagsCount[tag].add(content.id);
+  });
+});
+
+const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
 ---
 
-<BaseLayout lang="en" slug="/">
+<BaseLayout lang={userLang} slug="/">
   <div class="grid gap-4 mt-4">
     <div class="grid gap-2">
       <h2 class="text-2xl font-bold">Latest Posts</h2>
