@@ -63,7 +63,8 @@ git submodule update
 To pull changes into submodules:
 
 ```bash
-git submodule update --remote
+git submodule update --remote content
+git submodule update --remote web-editor
 ```
 
 ## Steps to create Astro project
