@@ -19,7 +19,6 @@ const getAllCollectionEntries = (collectionName) => {
 }
 
 const getAllLinks = async (lang) => {
-  console.log(lang);
   return await getAllCollectionEntries('links').then((links) =>
       links.filter((entry) => entry.data.lang === lang)
   );
@@ -30,10 +29,24 @@ const getAllPosts = async (lang) => {
   )
 };
 
-const links = await getAllLinks(userLang);
-const posts = await getAllPosts(userLang);
+const getPublishedLinks = async (lang) => {
+  return await getAllLinks(lang).then((links) =>
+      links.filter((entry) => entry.data.status.startsWith('published'))
+  );
+};
+const getPublishedPosts = async (lang) => {
+  return await getAllPosts(lang).then((posts) =>
+    posts.filter((entry) => entry.data.status.startsWith('published'))
+  )
+};
 
-const contents = [...posts, ...links];
+
+const links = await getPublishedLinks(userLang);
+const posts = await getPublishedPosts(userLang);
+
+const contents = [...posts, ...links].toSorted((a, b) =>
+  b.data.date?.edited?.localeCompare(a.data.date?.edited)
+);
 
 const tagsCount = {};
 contents.forEach((content) => {
@@ -54,10 +67,9 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
         Check out the latest articles from our blog.
       </p>
     </div>
-    {tags.map(t => <li>{t}</li>)}
     <div class="grid gap-6">
       {
-        contents.map((content) => (
+        contents.slice(0, 4).map((content) => (
           <div class="grid md:grid-cols-[200px_1fr] gap-4">
             <img
               src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${content.data.title.substring(0, content.data.title.indexOf(' '))}`}
@@ -174,5 +186,6 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
         </div>
       </div>
     </div>
-  </div></BaseLayout
->
+  </div>
+  <ul>{tags.map((t) => <li>{t}</li>)}</ul>
+</BaseLayout>
