@@ -92,9 +92,7 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
                 <div>Ago 29, 2024</div>
               </div>
               <p class="text-muted-foreground line-clamp-3">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                euismod, nisl nec ultricies lacus, nisl nunc sollicitudin nisl,
-                eget aliquam nisl nisl sit amet nisl.
+                {content.data.brief}
               </p>
               <a
                 href={'./' + content.collection + '/' + content.id.substring(3) + '/'}
@@ -107,6 +105,7 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
         ))
       }
     </div>
+    <!--
     <div class="grid gap-4">
       <div class="grid gap-2">
         <h2 class="text-2xl font-bold">Popular Posts</h2>
@@ -186,6 +185,7 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
         </div>
       </div>
     </div>
+    -->
   </div>
-  <ul>{tags.map((t) => <li>{t}</li>)}</ul>
+  <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
 </BaseLayout>

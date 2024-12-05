@@ -57,6 +57,27 @@ contents.forEach((content) => {
 });
 
 const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
+
+const renderDate = (completeDate) => {
+  const MONTHS = {
+    '01': 'enero', '02': 'febrero', '03': 'marzo', '04': 'abril', '05': 'mayo', '06': 'junio', '07': 'julio', '08': 'agosto', '09': 'septiembre', '10': 'octubre', '11': 'noviembre', '12': 'diciembre'
+  };
+  const [date, time] = completeDate.split(' ');
+  const [year, month, day] = date.split('.');
+
+  const dayNumber = parseInt(day, 10);
+
+  return `${dayNumber} de ${MONTHS[month]} de ${year}`;
+};
+
+const renderImgSrc = (imageData, title) => {
+  if( !imageData?.url ) {
+    return `https://placehold.co/400x400/999999/dddddd?font=mono&text=${title.substring(0, title.indexOf(' '))}`;
+  }
+
+  return imageData.url;
+}
+
 ---
 
 <BaseLayout lang={userLang} slug="/">
@@ -72,7 +93,7 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
         contents.slice(0, 4).map((content) => (
           <div class="grid md:grid-cols-[200px_1fr] gap-4">
             <img
-              src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${content.data.title.substring(0, content.data.title.indexOf(' '))}`}
+              src={renderImgSrc(content.data.image, content.data.title)}
               alt="Blog post cover"
               width={200}
               height={150}
@@ -89,12 +110,10 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
                   class="shrink-0 bg-border h-full w-[1px]"
                   data-id="25"
                 />
-                <div>Ago 29, 2024</div>
+                <div>{renderDate(content.data.date.created)}</div>
               </div>
               <p class="text-muted-foreground line-clamp-3">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                euismod, nisl nec ultricies lacus, nisl nunc sollicitudin nisl,
-                eget aliquam nisl nisl sit amet nisl.
+                {content.data.brief}
               </p>
               <a
                 href={'./' + content.collection + '/' + content.data.slug + '/'}
@@ -107,6 +126,7 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
         ))
       }
     </div>
+    <!--
     <div class="grid gap-4">
       <div class="grid gap-2">
         <h2 class="text-2xl font-bold">Popular Posts</h2>
@@ -186,6 +206,7 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
         </div>
       </div>
     </div>
+    -->
   </div>
-  <ul>{tags.map((t) => <li>{t}</li>)}</ul>
+  <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
 </BaseLayout>
