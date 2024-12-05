@@ -1,12 +1,12 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 
-const links = await getCollection("links").then((links) =>
-  links.filter((entry) => entry.id.startsWith("en-"))
+const links = await getCollection('links').then((links) =>
+  links.filter((entry) => entry.id.startsWith('en-'))
 );
-const posts = await getCollection("posts").then((posts) =>
-  posts.filter((entry) => entry.id.startsWith("en-"))
+const posts = await getCollection('posts').then((posts) =>
+    posts.filter((entry) => entry.id.startsWith('en-'))
 );
 
 const contents = [...posts, ...links];
@@ -25,7 +25,7 @@ const contents = [...posts, ...links];
         contents.map((content) => (
           <div class="grid md:grid-cols-[200px_1fr] gap-4">
             <img
-              src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${content.data.title.substring(0, content.data.title.indexOf(" "))}`}
+              src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${content.data.title.substring(0, content.data.title.indexOf(' '))}`}
               alt="Blog post cover"
               width={200}
               height={150}
@@ -50,7 +50,7 @@ const contents = [...posts, ...links];
                 eget aliquam nisl nisl sit amet nisl.
               </p>
               <a
-                href={"./" + content.collection + "/" + content.id.substring(3) + "/"}
+                href={'./' + content.collection + '/' + content.id.substring(3) + '/'}
                 class="text-primary font-medium hover:underline"
               >
                 Read more

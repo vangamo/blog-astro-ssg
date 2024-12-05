@@ -1,14 +1,13 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 
-const links = await getCollection("links").then((links) =>
-  links.filter((entry) => entry.id.startsWith("es-"))
+const links = await getCollection('links').then((links) =>
+  links.filter((entry) => entry.id.startsWith('es-'))
 );
-console.log(links);
 
-const posts = await getCollection("posts").then((posts) =>
-  posts.filter((entry) => entry.id.startsWith("es-"))
+const posts = await getCollection('posts').then((posts) =>
+  posts.filter((entry) => entry.id.startsWith('es-'))
 );
 
 const contents = [...posts, ...links];
@@ -38,7 +37,7 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
         contents.map((content) => (
           <div class="grid md:grid-cols-[200px_1fr] gap-4">
             <img
-              src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${content.data.title.substring(0, content.data.title.indexOf(" "))}`}
+              src={`https://placehold.co/400x400/999999/dddddd?font=mono&text=${content.data.title.substring(0, content.data.title.indexOf(' '))}`}
               alt="Blog post cover"
               width={200}
               height={150}
@@ -63,7 +62,7 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
                 eget aliquam nisl nisl sit amet nisl.
               </p>
               <a
-                href={"./" + content.collection + "/" + content.id.substring(3) + "/"}
+                href={'./' + content.collection + '/' + content.id.substring(3) + '/'}
                 class="text-primary font-medium hover:underline"
               >
                 Read more
