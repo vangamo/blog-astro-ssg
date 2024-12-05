@@ -3,17 +3,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const getAllCollectionEntries = (collectionName) => {
-  return getCollection(collectionName);
+  return getCollection(collectionName).then(entries => {
+    entries.forEach(entry => {
+      const [lang, ...slug] = entry.id.split('-');
+      entry.data = {
+        ...entry.data,
+        lang,
+        slug: slug.join('-')
+      };
+    });
+    return entries;
+  });
 }
 
 const getAllLinks = async () => {
   return await getAllCollectionEntries('links').then((links) =>
-    links.filter((entry) => entry.id.startsWith('es-'))
+      links.filter((entry) => entry.data.lang === 'es')
   );
 };
 const getAllPosts = async () => {
   return await getAllCollectionEntries('posts').then((posts) =>
-    posts.filter((entry) => entry.id.startsWith('es-'))
+    posts.filter((entry) => entry.data.lang === 'es')
   )
 };
 
@@ -72,7 +82,7 @@ const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[
                 eget aliquam nisl nisl sit amet nisl.
               </p>
               <a
-                href={'./' + content.collection + '/' + content.id.substring(3) + '/'}
+                href={'./' + content.collection + '/' + content.data.slug + '/'}
                 class="text-primary font-medium hover:underline"
               >
                 Read more
