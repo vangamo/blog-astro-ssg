@@ -2,13 +2,23 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const links = await getCollection('links').then((links) =>
-  links.filter((entry) => entry.id.startsWith('es-'))
-);
+const getAllCollectionEntries = (collectionName) => {
+  return getCollection(collectionName);
+}
 
-const posts = await getCollection('posts').then((posts) =>
-  posts.filter((entry) => entry.id.startsWith('es-'))
-);
+const getAllLinks = async () => {
+  return await getAllCollectionEntries('links').then((links) =>
+    links.filter((entry) => entry.id.startsWith('es-'))
+  );
+};
+const getAllPosts = async () => {
+  return await getAllCollectionEntries('posts').then((posts) =>
+    posts.filter((entry) => entry.id.startsWith('es-'))
+  )
+};
+
+const links = await getAllLinks();
+const posts = await getAllPosts();
 
 const contents = [...posts, ...links];
 
