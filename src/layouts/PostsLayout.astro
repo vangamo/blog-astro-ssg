@@ -42,6 +42,16 @@ const lang = Astro.currentLocale;
           main a {
             @apply text-lg text-primary underline underline-offset-1;
           }
+          main pre {
+            @apply text-lg overflow-scroll mt-8 mb-8 p-8 border-2;
+            font-family: "Space Mono", monospace;
+            --font-monospace: "Space Mono";
+            background-color: #163350!important;
+            border-top-left-radius: 255px 15px;
+            border-top-right-radius: 15px 225px;
+            border-bottom-right-radius: 225px 15px;
+            border-bottom-left-radius:15px 255px;
+          }
 
           main p:not(:has(> a:only-of-type)) a {
               display: block;
