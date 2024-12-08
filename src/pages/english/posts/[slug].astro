@@ -1,6 +1,13 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
+const locale = Astro.currentLocale;
 
+import PostsLayout from '../../../layouts/PostsLayout.astro';
+
+/*
+    Astro function to generate a list of valid slugs
+    for post pages
+*/
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
 
@@ -13,12 +20,10 @@ export async function getStaticPaths() {
   }))
 }
 
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-
-const entry = await getEntry('posts', 'en-'+Astro.params.slug);
+const entry = await getEntry('posts', locale+'-'+Astro.params.slug);
 const {Content} = await render(entry);
 ---
 
-<BaseLayout pageTitle={entry.data.title} lang="en" slug="/posts/">
+<PostsLayout pageTitle={entry.data.title} slug="/posts/">
   <Content />
-</BaseLayout>
+</PostsLayout>
