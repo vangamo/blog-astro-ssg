@@ -13,12 +13,12 @@ export async function getStaticPaths() {
   }))
 }
 
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostsLayout from '../../layouts/PostsLayout.astro';
 
 const entry = await getEntry('posts', 'es-'+Astro.params.slug);
 const {Content} = await render(entry);
 ---
 
-<BaseLayout pageTitle={entry.data.title} lang="es" slug="/posts/">
+<PostsLayout pageTitle={entry.data.title} slug="/posts/">
   <Content />
-</BaseLayout>
+</PostsLayout>

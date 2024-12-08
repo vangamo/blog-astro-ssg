@@ -1,0 +1,66 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+const { pageTitle, slug } = Astro.props;
+
+const lang = Astro.currentLocale;
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>vanGamo | {pageTitle}</title>
+  </head>
+  <body class="bg-background">
+    <div class="flex flex-col min-h-screen">
+      <Header lang={lang} slug={slug} />
+
+      <main
+        class="container py-8"
+      >
+        <style is:global>
+          main h1 {
+            @apply font-extrabold text-2xl text-balance text-center md:text-left mt-4 mb-16;
+            font-family: "Space Mono", monospace;
+            --font-monospace: "Space Mono";
+          }
+          main h2 {
+            @apply font-bold text-xl mt-16 mb-4;
+            font-family: "Space Mono", monospace;
+            --font-monospace: "Space Mono";
+          }
+          main p {
+            @apply text-lg overflow-ellipsis text-justify mb-8;
+            text-indent: 2em;
+            hyphens: auto;
+          }
+          main a {
+            @apply text-lg text-primary underline underline-offset-1;
+          }
+
+          main p:not(:has(> a:only-of-type)) a {
+              display: block;
+          }
+          main p:not(:has(> a:only-of-type)) a::before {
+              content: '<';
+              text-decoration-line: none;
+          }
+          main p:not(:has(> a:only-of-type)) a::after {
+              content: '>';
+              text-decoration-line: none;
+          }
+        </style>
+        <div class="max-w-2xl mx-auto">
+          <slot />
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  </body>
+</html>
