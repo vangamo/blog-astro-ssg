@@ -8,11 +8,11 @@ const currentYear = (new Date()).getFullYear();
 ---
 
 <footer class="bg-muted border-t">
-  <div class="container px-4 md:px-6 py-6 flex items-center justify-between">
-    <p class="text-sm text-muted-foreground">
+  <div class="container px-4 lg:px-6 py-6 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-4">
+    <small class="text-sm text-muted-foreground">
       &copy; {currentYear} vanGamo blog. {t['footer.copy.AllRights']}
-    </p>
-    <nav class="flex items-center gap-4">
+    </small>
+    <nav class="flex flex-col lg:flex-row items-center gap-2 lg:gap-4">
       <a href="#" class="text-sm hover:underline"> {t['menu.item.Terms']} </a>
       <a href="#" class="text-sm hover:underline"> {t['menu.item.Privacy']} </a>
       <a href="#" class="text-sm hover:underline"> {t['menu.item.Contact']} </a>
