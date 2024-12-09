@@ -52,17 +52,62 @@ const contents = [...posts, ...links].toSorted((a, b) =>
 
 // Popular posts
 
-const getPopularPagesFromAnalytics = () => {
+const getPopularPagesFromAnalytics = async () => {
+
+  const MATOMO_SERVER = 'https://analytics-sever.matomo.org/';
+  const MATOMO_TOKEN = 'annonymous';
+  const MATOMO_SITE_ID = 1;
+
+  const serverUrl = MATOMO_SERVER +
+      '?module=API' +
+      '&method=Actions.getPageUrls' +
+      '&expanded=1' +
+      '&format=JSON' +
+      `&idSite=${MATOMO_SITE_ID}` +
+      '&period=year&date=2024-12-09' +
+      '&filter_sort_column=nb_visits' +
+      '&filter_sort_order=desc';
+  const serverAuthVars = `token_auth=${MATOMO_TOKEN}`;
+
+  const visits = await fetch(serverUrl,
+    {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: serverAuthVars
+    })
+    .then(r => r.json())
+    .then(data => {
+      console.log(data);
+      if( !Array.isArray(data) ) {
+        if( data.message ) {
+          console.error(`Matomo server responded an error (${data.message})`);
+        }
+        else {
+          console.error(`Matomo server responded an error`);
+        }
+        return;
+      }
+      const posts = data.find(d=>d.label==='posts')?.subtable || [];
+      const links = data.find(d=>d.label==='links')?.subtable || [];
+
+      return {posts, links};
+    });
+
+  if( !visits ) {
+    return [];
+  }
+
   return [
-    { path: '/posts/apis-de-placeholders-de-imagenes', visits: 10 },
-    { path: '/posts/recopilacion-de-retos-de-codigo-de-adviento', visits: 30 },
-    { path: '/links/state-of-css', visits: 20 }
-  ]
+      ...visits.posts.map(c => ({path: `/posts/${c.label}`, visits: c.nb_visits*5 + c.nb_hits})),
+      ...visits.links.map(c => ({path: `/links/${c.label}`, visits: c.nb_visits*5 + c.nb_hits}))
+    ]
     .toSorted((a,b) => a.visits<b.visits ? 1 : -1)
     .map(c => c.path)
 };
 
-const popularPagePaths = getPopularPagesFromAnalytics();
+const popularPagePaths = await getPopularPagesFromAnalytics();
 
 const popularContents = popularPagePaths.map( path => contents.find(astroContent => path === '/' + astroContent.collection + '/' + astroContent.data.slug) );
 
