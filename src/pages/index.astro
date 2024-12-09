@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 
 const userLang = Astro.currentLocale || 'es';
 
-const getAllCollectionEntries = (collectionName) => {
+const getAllCollectionEntries = (collectionName: any): Promise<Array<any>> => {
   return getCollection(collectionName).then(entries => {
     entries.forEach(entry => {
       const [lang, ...slug] = entry.id.split('-');
@@ -18,23 +18,23 @@ const getAllCollectionEntries = (collectionName) => {
   });
 }
 
-const getAllLinks = async (lang) => {
+const getAllLinks = async (lang: string) => {
   return await getAllCollectionEntries('links').then((links) =>
       links.filter((entry) => entry.data.lang === lang)
   );
 };
-const getAllPosts = async (lang) => {
+const getAllPosts = async (lang: string) => {
   return await getAllCollectionEntries('posts').then((posts) =>
     posts.filter((entry) => entry.data.lang === lang)
   )
 };
 
-const getPublishedLinks = async (lang) => {
+const getPublishedLinks = async (lang: string) => {
   return await getAllLinks(lang).then((links) =>
       links.filter((entry) => entry.data.status.startsWith('published'))
   );
 };
-const getPublishedPosts = async (lang) => {
+const getPublishedPosts = async (lang: string) => {
   return await getAllPosts(lang).then((posts) =>
     posts.filter((entry) => entry.data.status.startsWith('published'))
   )
@@ -58,7 +58,7 @@ contents.forEach((content) => {
 
 const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
 
-const renderDate = (completeDate) => {
+const renderDate = (completeDate: string) => {
   const MONTHS = {
     '01': 'enero', '02': 'febrero', '03': 'marzo', '04': 'abril', '05': 'mayo', '06': 'junio', '07': 'julio', '08': 'agosto', '09': 'septiembre', '10': 'octubre', '11': 'noviembre', '12': 'diciembre'
   };
@@ -70,7 +70,7 @@ const renderDate = (completeDate) => {
   return `${dayNumber} de ${MONTHS[month]} de ${year}`;
 };
 
-const renderImgSrc = (imageData, title) => {
+const renderImgSrc = (imageData:{url?: string}, title: string) => {
   if( !imageData?.url ) {
     return `https://placehold.co/400x400/999999/dddddd?font=mono&text=${title.substring(0, title.indexOf(' '))}`;
   }
