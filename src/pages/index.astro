@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { format } from '@formkit/tempo';
 
 const userLang = Astro.currentLocale || 'es';
 
@@ -48,6 +49,90 @@ const contents = [...posts, ...links].toSorted((a, b) =>
   b.data.date?.edited?.localeCompare(a.data.date?.edited)
 );
 
+
+
+// Popular posts
+
+const getPopularPagesFromAnalytics = async (lang) => {
+  if( !import.meta.env.PROD ) {
+    return [];
+  }
+  if( !import.meta.env.MATOMO_SERVER ) {
+    console.error('MATOMO_SERVER variable is not configured');
+    return [];
+  }
+  if( !import.meta.env.MATOMO_TOKEN ) {
+    console.error('MATOMO_TOKEN variable is not configured');
+    return [];
+  }
+  if( !import.meta.env.MATOMO_SITE_ID ) {
+    console.error('MATOMO_SITE_ID variable is not configured');
+    return [];
+  }
+
+  const {
+    MATOMO_SERVER = 'http://localhost/',
+    MATOMO_TOKEN = 'annonympous',
+    MATOMO_SITE_ID = 1
+  } = import.meta.env;
+  const TODAY = format(new Date(), 'YYYY-MM-DD', lang);
+
+  const serverUrl = MATOMO_SERVER +
+      '?module=API' +
+      '&method=Actions.getPageUrls' +
+      '&expanded=1' +
+      '&format=JSON' +
+      `&idSite=${MATOMO_SITE_ID}` +
+      `&period=year&date=${TODAY}` +
+      '&filter_sort_column=nb_visits' +
+      '&filter_sort_order=desc';
+  const serverAuthVars = `token_auth=${MATOMO_TOKEN}`;
+
+  const visits = await fetch(serverUrl,
+    {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: serverAuthVars
+    })
+    .then(r => r.json())
+    .then(data => {
+      if( !Array.isArray(data) ) {
+        if( data.message ) {
+          console.error(`Matomo server responded an error (${data.message})`);
+        }
+        else {
+          console.error(`Matomo server responded an error`);
+        }
+        return;
+      }
+
+      const posts = data.find(d=>d.label==='posts')?.subtable || [];
+      const links = data.find(d=>d.label==='links')?.subtable || [];
+
+      return {posts, links};
+    });
+
+  if( !visits ) {
+    return [];
+  }
+
+  return [
+      ...visits.posts.map(c => ({path: `/posts/${c.label}`, visits: c.nb_visits*5 + c.nb_hits})),
+      ...visits.links.map(c => ({path: `/links/${c.label}`, visits: c.nb_visits*5 + c.nb_hits}))
+    ]
+    .toSorted((a,b) => a.visits<b.visits ? 1 : -1)
+    .map(c => c.path)
+};
+
+const popularPagePaths = await getPopularPagesFromAnalytics(userLang);
+
+const popularContents = popularPagePaths.map( path => contents.find(astroContent => path === '/' + astroContent.collection + '/' + astroContent.data.slug) );
+
+
+// Tags
+
 const tagsCount = {};
 contents.forEach((content) => {
   content.data.tags.forEach((tag) => {
@@ -57,6 +142,10 @@ contents.forEach((content) => {
 });
 
 const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
+
+
+
+// Render helpers
 
 const renderDate = (completeDate) => {
   const MONTHS = {
@@ -126,87 +215,95 @@ const renderImgSrc = (imageData, title) => {
         ))
       }
     </div>
-    <!--
-    <div class="grid gap-4">
-      <div class="grid gap-2">
-        <h2 class="text-2xl font-bold">Popular Posts</h2>
-        <p class="text-muted-foreground">
-          Check out the most popular articles from our blog.
-        </p>
+    {(popularContents.length>0) &&
+      (
+      <div class="grid gap-4 mt-8">
+        <div class="grid gap-2">
+          <h2 class="text-2xl font-bold">Post más populares</h2>
+          <p class="text-muted-foreground">
+            Aquí tienes una lista con los artículos más leídos.
+          </p>
+        </div>
+        <div class="grid gap-4">
+
+          {
+          popularContents.slice(0, 3).map((content, idx) => (
+          <div class="flex items-center gap-4">
+            <div
+              class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
+            >
+              {idx+1}
+            </div>
+            <a class="space-y-1" href={'./' + content.collection + '/' + content.data.slug + '/'}>
+              <h3 class="text-lg font-medium">
+                {content.data.title}
+              </h3>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div>{content.data.author}</div>
+                <div
+                  data-orientation="vertical"
+                  role="none"
+                  class="shrink-0 bg-border h-full w-[1px]"
+                  data-id="25"
+                >
+                </div>
+                <div>{renderDate(content.data.date.created)}</div>
+              </div>
+            </a>
+          </div>
+          ))}
+
+          <!--
+          <div class="flex items-center gap-4">
+            <div
+              class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
+            >
+              2
+            </div>
+            <div class="space-y-1">
+              <h3 class="text-lg font-medium">
+                Mastering Responsive Design with CSS
+              </h3>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div>John Smith</div>
+                <div
+                  data-orientation="vertical"
+                  role="none"
+                  class="shrink-0 bg-border h-full w-[1px]"
+                  data-id="25"
+                >
+                </div>
+                <div>May 15, 2023</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div
+              class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
+            >
+              3
+            </div>
+            <div class="space-y-1">
+              <h3 class="text-lg font-medium">
+                Exploring the Future of JavaScript
+              </h3>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div>Sarah Johnson</div>
+                <div
+                  data-orientation="vertical"
+                  role="none"
+                  class="shrink-0 bg-border h-full w-[1px]"
+                  data-id="25"
+                >
+                </div>
+                <div>April 30, 2023</div>
+              </div>
+            </div>
+          </div>
+          -->
+        </div>
       </div>
-      <div class="grid gap-4">
-        <div class="flex items-center gap-4">
-          <div
-            class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-          >
-            1
-          </div>
-          <div class="space-y-1">
-            <h3 class="text-lg font-medium">
-              Unleash Your Creativity with Figma
-            </h3>
-            <div class="flex items-center gap-2 text-sm text-muted-foreground">
-              <div>Jane Doe</div>
-              <div
-                data-orientation="vertical"
-                role="none"
-                class="shrink-0 bg-border h-full w-[1px]"
-                data-id="25"
-              >
-              </div>
-              <div>June 1, 2023</div>
-            </div>
-          </div>
-        </div>
-        <div class="flex items-center gap-4">
-          <div
-            class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-          >
-            2
-          </div>
-          <div class="space-y-1">
-            <h3 class="text-lg font-medium">
-              Mastering Responsive Design with CSS
-            </h3>
-            <div class="flex items-center gap-2 text-sm text-muted-foreground">
-              <div>John Smith</div>
-              <div
-                data-orientation="vertical"
-                role="none"
-                class="shrink-0 bg-border h-full w-[1px]"
-                data-id="25"
-              >
-              </div>
-              <div>May 15, 2023</div>
-            </div>
-          </div>
-        </div>
-        <div class="flex items-center gap-4">
-          <div
-            class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-          >
-            3
-          </div>
-          <div class="space-y-1">
-            <h3 class="text-lg font-medium">
-              Exploring the Future of JavaScript
-            </h3>
-            <div class="flex items-center gap-2 text-sm text-muted-foreground">
-              <div>Sarah Johnson</div>
-              <div
-                data-orientation="vertical"
-                role="none"
-                class="shrink-0 bg-border h-full w-[1px]"
-                data-id="25"
-              >
-              </div>
-              <div>April 30, 2023</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    -->
+    )}
   </div>
   <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
 </BaseLayout>
