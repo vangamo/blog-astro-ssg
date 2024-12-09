@@ -17,7 +17,7 @@ const t = translations[locale];
     </a>
     <nav class="hidden md:flex items-center gap-4">
       <a href={getAbsoluteLocaleUrl(locale, '/')} class={(slug==='/'?'':'underline ')+"text-sm font-medium hover:underline"}> {t['menu.item.Home']} </a>
-      <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/posts')?'':'underline ')+"text-sm font-medium hover:underline"}> {t['menu.item.Blog']} </a>
+      <a href={getAbsoluteLocaleUrl(locale, '/blog/')} class={(slug.startsWith('/blog') || slug.startsWith('/posts') || slug.startsWith('/links')?'':'underline ')+"text-sm font-medium hover:underline"}> {t['menu.item.Blog']} </a>
       <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/about')?'':'underline ')+"text-sm font-medium hover:underline"}> {t['menu.item.About']} </a>
       <a href={getAbsoluteLocaleUrl(locale, '/about/')} class={(slug.startsWith('/contact')?'':'underline ')+"text-sm font-medium hover:underline"}>
         {t['menu.item.Contact']}
