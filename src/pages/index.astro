@@ -54,6 +54,9 @@ const contents = [...posts, ...links].toSorted((a, b) =>
 // Popular posts
 
 const getPopularPagesFromAnalytics = async (lang) => {
+  if( !import.meta.env.PROD ) {
+    return [];
+  }
   if( !import.meta.env.MATOMO_SERVER ) {
     console.error('MATOMO_SERVER variable is not configured');
     return [];
