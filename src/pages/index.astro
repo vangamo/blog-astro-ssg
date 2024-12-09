@@ -48,9 +48,26 @@ const contents = [...posts, ...links].toSorted((a, b) =>
   b.data.date?.edited?.localeCompare(a.data.date?.edited)
 );
 
+
+
 // Popular posts
 
-const popularContents = contents;
+const getPopularPagesFromAnalytics = () => {
+  return [
+    { path: '/posts/apis-de-placeholders-de-imagenes', visits: 10 },
+    { path: '/posts/recopilacion-de-retos-de-codigo-de-adviento', visits: 30 },
+    { path: '/links/state-of-css', visits: 20 }
+  ]
+    .toSorted((a,b) => a.visits<b.visits ? 1 : -1)
+    .map(c => c.path)
+};
+
+const popularPagePaths = getPopularPagesFromAnalytics();
+
+const popularContents = popularPagePaths.map( path => contents.find(astroContent => path === '/' + astroContent.collection + '/' + astroContent.data.slug) );
+
+
+// Tags
 
 const tagsCount = {};
 contents.forEach((content) => {
@@ -61,6 +78,10 @@ contents.forEach((content) => {
 });
 
 const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
+
+
+
+// Render helpers
 
 const renderDate = (completeDate) => {
   const MONTHS = {
