@@ -2,6 +2,8 @@ import { defineConfig } from 'astro/config';
 
 import tailwind from '@astrojs/tailwind';
 
+import { remarkPlugin, rehypePlugin } from './src/lib/infographyRemarkPlugins';
+
 // https://astro.build/config
 export default defineConfig({
   i18n: {
@@ -11,5 +13,10 @@ export default defineConfig({
   experimental: {
     contentLayer: true,
   },
-  integrations: [tailwind()]
+  integrations: [tailwind()],
+  markdown: {
+    syntaxHighlight: 'shiki',
+    remarkPlugins: [[ remarkPlugin, { option1: "contents" } ]],
+    rehypePlugins: [[ rehypePlugin, { option1: "contents" } ]]
+  }
 });
