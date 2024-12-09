@@ -15,6 +15,7 @@
     "tailwindcss": "^3.4.10"
   },
   "devDependencies": {
+    "@formkit/tempo": "^0.1.2",
     "typescript": ">=5.0.2 <6.0.0"
   }
 }

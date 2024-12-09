@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { format } from '@formkit/tempo';
 
 const userLang = Astro.currentLocale || 'es';
 
@@ -52,11 +53,26 @@ const contents = [...posts, ...links].toSorted((a, b) =>
 
 // Popular posts
 
-const getPopularPagesFromAnalytics = async () => {
+const getPopularPagesFromAnalytics = async (lang) => {
+  if( !import.meta.env.MATOMO_SERVER ) {
+    console.error('MATOMO_SERVER variable is not configured');
+    return [];
+  }
+  if( !import.meta.env.MATOMO_TOKEN ) {
+    console.error('MATOMO_TOKEN variable is not configured');
+    return [];
+  }
+  if( !import.meta.env.MATOMO_SITE_ID ) {
+    console.error('MATOMO_SITE_ID variable is not configured');
+    return [];
+  }
 
-  const MATOMO_SERVER = 'https://analytics-sever.matomo.org/';
-  const MATOMO_TOKEN = 'annonymous';
-  const MATOMO_SITE_ID = 1;
+  const {
+    MATOMO_SERVER = 'http://localhost/',
+    MATOMO_TOKEN = 'annonympous',
+    MATOMO_SITE_ID = 1
+  } = import.meta.env;
+  const TODAY = format(new Date(), 'YYYY-MM-DD', lang);
 
   const serverUrl = MATOMO_SERVER +
       '?module=API' +
@@ -64,7 +80,7 @@ const getPopularPagesFromAnalytics = async () => {
       '&expanded=1' +
       '&format=JSON' +
       `&idSite=${MATOMO_SITE_ID}` +
-      '&period=year&date=2024-12-09' +
+      `&period=year&date=${TODAY}` +
       '&filter_sort_column=nb_visits' +
       '&filter_sort_order=desc';
   const serverAuthVars = `token_auth=${MATOMO_TOKEN}`;
@@ -79,7 +95,6 @@ const getPopularPagesFromAnalytics = async () => {
     })
     .then(r => r.json())
     .then(data => {
-      console.log(data);
       if( !Array.isArray(data) ) {
         if( data.message ) {
           console.error(`Matomo server responded an error (${data.message})`);
@@ -89,6 +104,7 @@ const getPopularPagesFromAnalytics = async () => {
         }
         return;
       }
+
       const posts = data.find(d=>d.label==='posts')?.subtable || [];
       const links = data.find(d=>d.label==='links')?.subtable || [];
 
@@ -107,7 +123,7 @@ const getPopularPagesFromAnalytics = async () => {
     .map(c => c.path)
 };
 
-const popularPagePaths = await getPopularPagesFromAnalytics();
+const popularPagePaths = await getPopularPagesFromAnalytics(userLang);
 
 const popularContents = popularPagePaths.map( path => contents.find(astroContent => path === '/' + astroContent.collection + '/' + astroContent.data.slug) );
 
