@@ -1,0 +1,57 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+const locale = Astro.currentLocale;
+
+import PostsLayout from '../layouts/PostsLayout.astro';
+
+const entry = await getEntry('posts', 'en-what-s-new-with-CSS-in-2024');
+//console.log(entry);
+
+const {Content} = await render(entry);
+// <Content />
+---
+
+<style is:inline>
+  canvas {
+    width: 100%;
+    aspect-ratio: 19 / 10;  /* Most common aspect-ratio in mobile */
+    border-width: 1px;
+  }
+  @media (width > 1280px) {
+    canvas {
+      width: 72rem;  /* 6xl: 72rem  2xl: 42rem */
+      margin-inline: -15rem;
+    }
+  }
+</style>
+<PostsLayout pageTitle={entry.data.title} slug="/posts/">
+  <h1 id="whats-new-with-css-in-2024">What’s new with CSS in 2024</h1>
+  <h2>Media Queries Range Contexts</h2>
+  <p>@container size queries
+    Container queries enable you to apply styles to an element based on the size of the element’s container. If, for example, a container has less space available in the surrounding context, you can hide certain elements or use smaller fonts.
+    <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries">MDN</a></p>
+  <canvas></canvas>
+  <script is:inline>
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const image = new Image(107, 81); //(642, 485); // Using optional size for image
+    image.onload = drawImageActualSize; // Draw when image has loaded
+    image.src = "/browser.svg";
+
+    function drawImageActualSize() {
+      // Use the intrinsic size of image in CSS pixels for the canvas element
+      //canvas.width = this.naturalWidth;
+      //canvas.height = this.naturalHeight;
+
+      // Will draw the image as 300x227, ignoring the custom size of 60x45
+      // given in the constructor
+      ctx.drawImage(this, 0, 0, 107, 81);
+    }
+  </script>
+  <p>@container style queries</p>
+  <p>Container queries enable you to apply styles to elements nested within a specific container based on the features of that container. The query returns true or false depending on whether the query condition is true for the container.</p>
+  <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_size_and_style_queries</span></span>
+    <span class="line"><span></span></span></code></pre>
+  
+</PostsLayout>
