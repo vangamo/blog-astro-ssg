@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
 
 import tailwind from '@astrojs/tailwind';
-import mdx from "@astrojs/mdx";
-import { remarkPlugin, rehypePlugin } from './src/lib/infographyRemarkPlugins';
+//import mdx from "@astrojs/mdx";
+//import { remarkPlugin, rehypePlugin } from './src/lib/infographyRemarkPlugins';
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,11 +15,11 @@ export default defineConfig({
   },
   integrations: [
     tailwind(),
-    mdx()
+    //mdx()
   ],
   markdown: {
     syntaxHighlight: 'shiki',
-    remarkPlugins: [[ remarkPlugin, { option1: "contents" } ]],
-    rehypePlugins: [[ rehypePlugin, { option1: "contents" } ]]
+    //remarkPlugins: [[ remarkPlugin, { option1: "contents" } ]],
+    //rehypePlugins: [[ rehypePlugin, { option1: "contents" } ]]
   }
 });
