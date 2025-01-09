@@ -197,7 +197,9 @@ const renderStatus = (status) => {
               style={{ aspectRatio: "200/150", objectFit: "cover" }}
             />
             <div class="space-y-2">
-              <h3 class="text-xl font-bold">{content.data.title}</h3>
+              <a href={'./' + content.collection + '/' + content.data.slug + '/'} class="cursor-default">
+                <h3 class="text-xl font-bold">{content.data.title}</h3>
+              </a>
               <div class="flex items-center gap-2 text-sm text-muted-foreground">
                 <div>{content.data.author}</div>
                 <div
