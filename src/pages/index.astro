@@ -167,6 +167,13 @@ const renderImgSrc = (imageData, title) => {
   return imageData.url;
 }
 
+const renderStatus = (status) => {
+  if( import.meta.env.PROD || status === 'published' ) {
+    return '';
+  }
+  return ` (${status})`;
+}
+
 ---
 
 <BaseLayout slug="/">
@@ -208,7 +215,7 @@ const renderImgSrc = (imageData, title) => {
                 href={'./' + content.collection + '/' + content.data.slug + '/'}
                 class="text-primary font-medium hover:underline"
               >
-              Leer más
+              Leer más{renderStatus(content.data.status)}
               </a>
             </div>
           </div>
