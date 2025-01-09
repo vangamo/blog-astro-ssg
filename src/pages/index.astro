@@ -32,12 +32,12 @@ const getAllPosts = async (lang) => {
 
 const getPublishedLinks = async (lang) => {
   return await getAllLinks(lang).then((links) =>
-      links.filter((entry) => entry.data.status.startsWith('published'))
+      links.filter((entry) => entry.data.status.startsWith('published') || !import.meta.env.PROD)
   );
 };
 const getPublishedPosts = async (lang) => {
   return await getAllPosts(lang).then((posts) =>
-    posts.filter((entry) => entry.data.status.startsWith('published'))
+    posts.filter((entry) => entry.data.status.startsWith('published') || !import.meta.env.PROD)
   )
 };
 
@@ -199,7 +199,7 @@ const renderImgSrc = (imageData, title) => {
                   class="shrink-0 bg-border h-full w-[1px]"
                   data-id="25"
                 />
-                <div>{renderDate(content.data.date.created)}</div>
+                <div>{renderDate(content.data.date.edited)}</div>
               </div>
               <p class="text-muted-foreground line-clamp-3">
                 {content.data.brief}
@@ -247,7 +247,7 @@ const renderImgSrc = (imageData, title) => {
                   data-id="25"
                 >
                 </div>
-                <div>{renderDate(content.data.date.created)}</div>
+                <div>{renderDate(content.data.date.edited)}</div>
               </div>
             </a>
           </div>
