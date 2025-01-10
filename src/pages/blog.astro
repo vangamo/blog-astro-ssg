@@ -114,10 +114,10 @@ const renderStatus = (status) => {
     <div class="grid gap-2">
       <h2 class="text-2xl font-bold">Posts</h2>
     </div>
-    <div class="grid gap-6">
+    <ul class="grid gap-6">
       {
         posts.slice(0, 4000).map((content) => (
-          <div class="grid md:grid-cols-[200px_1fr] gap-4">
+          <li class="grid md:grid-cols-[200px_1fr] gap-4">
             <img
               src={renderImgSrc(content.data.image, content.data.title)}
               alt="Blog post cover"
@@ -153,10 +153,10 @@ const renderStatus = (status) => {
                 Leer más{renderStatus(content.data.status)}
               </a>
             </div>
-          </div>
+          </li>
         ))
       }
-    </div>
+    </ul>
   </div>
   <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
 </BaseLayout>

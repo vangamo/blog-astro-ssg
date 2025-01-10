@@ -30,25 +30,16 @@ export async function getStaticPaths() {
             entry.data.status.startsWith('published') || !import.meta.env.PROD
         )
     );
-  console.log(posts.length);
+
   const pageNumbers = Array.from(
     { length: Math.ceil(posts.length / ITEMS_TO_DISPLAY) },
     (n, i) => i
   );
 
   return pageNumbers.map((n) => ({ params: { num: n } }));
-  /*
-  return posts
-    .filter((entry) => entry.id.startsWith(locale + '-'))
-    .map((entry) => ({
-      params: {
-        num: entry.id.substring(3),
-      },
-    }));
-*/
 }
 
-const posts = await getCollection('posts')
+const allPosts = await getCollection('posts')
   .then((entries) => {
     entries.forEach((entry) => {
       const [lang, ...slug] = entry.id.split('-');
@@ -70,8 +61,52 @@ const posts = await getCollection('posts')
       .toSorted((a, b) =>
         b.data.date?.edited?.localeCompare(a.data.date?.edited)
       )
-      .splice(Astro.params.num * ITEMS_TO_DISPLAY, ITEMS_TO_DISPLAY)
   );
+
+const pageNumbers = Array.from(
+  { length: Math.ceil(allPosts.length / ITEMS_TO_DISPLAY) },
+  (n, i) => i
+);
+const currentPage = parseInt(Astro.params.num, 10);
+const posts = allPosts.splice(currentPage * ITEMS_TO_DISPLAY, ITEMS_TO_DISPLAY);
+
+const renderDate = (completeDate) => {
+  const MONTHS = {
+    '01': 'enero',
+    '02': 'febrero',
+    '03': 'marzo',
+    '04': 'abril',
+    '05': 'mayo',
+    '06': 'junio',
+    '07': 'julio',
+    '08': 'agosto',
+    '09': 'septiembre',
+    '10': 'octubre',
+    '11': 'noviembre',
+    '12': 'diciembre',
+  };
+  const [date, time] = completeDate.split(' ');
+  const [year, month, day] = date.split('.');
+
+  const dayNumber = parseInt(day, 10);
+
+  return `${dayNumber} de ${MONTHS[month]} de ${year}`;
+};
+
+const renderImgSrc = (imageData, title) => {
+  if (!imageData?.url) {
+    return `https://placehold.co/400x400/999999/dddddd?font=mono&text=${title.substring(0, title.indexOf(' '))}`;
+  }
+
+  return imageData.url;
+};
+
+const renderStatus = (status) => {
+  if (import.meta.env.PROD || status === 'published') {
+    return '';
+  }
+  return ` (${status})`;
+};
 ---
 
 <BaseLayout slug="/blog">
@@ -79,8 +114,106 @@ const posts = await getCollection('posts')
     <div class="grid gap-2">
       <h2 class="text-2xl font-bold">Posts</h2>
     </div>
+    <ul class="grid gap-6">
+      {
+        posts.slice(0, 4000).map((content) => (
+          <li class="grid md:grid-cols-[200px_1fr] gap-4">
+            <img
+              src={renderImgSrc(content.data.image, content.data.title)}
+              alt="Blog post cover"
+              width={200}
+              height={150}
+              class="rounded-lg object-cover"
+              style={{ aspectRatio: '200/150', objectFit: 'cover' }}
+            />
+            <div class="space-y-2">
+              <a
+                href={'/' + content.collection + '/' + content.data.slug + '/'}
+                class="cursor-default"
+              >
+                <h3 class="text-xl font-bold">{content.data.title}</h3>
+              </a>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div>{content.data.author}</div>
+                <div
+                  data-orientation="vertical"
+                  role="none"
+                  class="shrink-0 bg-border h-full w-[1px]"
+                  data-id="25"
+                />
+                <div>{renderDate(content.data.date.edited)}</div>
+              </div>
+              <p class="text-muted-foreground line-clamp-3">
+                {content.data.brief}
+              </p>
+              <a
+                href={'/' + content.collection + '/' + content.data.slug + '/'}
+                class="text-primary font-medium hover:underline"
+              >
+                Leer más{renderStatus(content.data.status)}
+              </a>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    <nav class="w-4/5">
+      <ul class="w-full flex items-center justify-center gap-4">
+        {
+          currentPage > 0 && (
+            <li>
+              <a
+                class="text-sm font-medium underline"
+                href={`/blog/posts-${currentPage - 1}`}
+                rel="prev"
+              >
+                Anterior
+              </a>
+            </li>
+          )
+        }
+        {
+          pageNumbers.map((page) => {
+            if (page === currentPage) {
+              return (
+                <li>
+                  <a
+                    class="font-semibold text-sm font-medium hover:underline"
+                    href="#"
+                  >
+                    {1 + page}
+                  </a>
+                </li>
+              );
+            } else {
+              return (
+                <li>
+                  <a
+                    class="text-sm font-medium underline"
+                    href={`/blog/posts-${page}`}
+                  >
+                    {1 + page}
+                  </a>
+                </li>
+              );
+            }
+          })
+        }
+        {
+          currentPage < pageNumbers.length - 1 && (
+            <li>
+              <a
+                class="text-sm font-medium underline"
+                href={`/blog/posts-${currentPage + 1}`}
+                rel="next"
+              >
+                Siguiente
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
   </div>
-  <ul>
-    {posts.map((content) => <li>{content.data.title}</li>)}
-  </ul>
+  <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
 </BaseLayout>
