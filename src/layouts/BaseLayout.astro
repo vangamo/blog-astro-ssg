@@ -4,10 +4,10 @@ import Footer from '../components/Footer.astro';
 import Sidebar from '../components/Sidebar.astro';
 import '../styles/global.css';
 
-const { pageTitle, lang, slug } = Astro.props;
+const { pageTitle, pageDesc, lang, slug } = Astro.props;
 ---
 
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
@@ -19,7 +19,20 @@ const { pageTitle, lang, slug } = Astro.props;
 
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>vanGamo blog{pageTitle? ': '+pageTitle : ''}</title>
+
+    <title>vanGamo blog{pageTitle ? ' | ' + pageTitle : ''}</title>
+    <meta
+      property="og:site_name"
+      content={`vanGamo blog${pageTitle ? ': ' + pageTitle : ''}`}
+      lang={lang}
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:url" content={`https://fullstack.igarrido.es${slug}`} />
+
+    <meta name="description" content={pageDesc} lang={lang} />
+    <meta property="og:description" content={pageDesc} lang={lang} />
   </head>
   <body class="bg-background">
     <div class="flex flex-col min-h-screen">
@@ -32,7 +45,7 @@ const { pageTitle, lang, slug } = Astro.props;
           <slot />
         </div>
         <div class="space-y-8">
-          <Sidebar></Sidebar>
+          <Sidebar />
         </div>
       </main>
 
