@@ -9,7 +9,8 @@ export default defineConfig({
     locales: ['es', { codes: ['en', 'en_US', 'en_UK'], path: 'english' }],
   },
   redirects: {
-    '/blog/posts': '/blog/posts-0',
+    '/blog/posts': '/blog/posts/0',
+    '/blog/links': '/blog/links/0',
   },
   integrations: [tailwind()],
 });

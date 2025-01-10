@@ -1,7 +1,7 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
 const locale = Astro.currentLocale;
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 export const ITEMS_TO_DISPLAY = 3;
 
@@ -31,15 +31,48 @@ export async function getStaticPaths() {
         )
     );
 
-  const pageNumbers = Array.from(
+  const links = await getCollection('links')
+    .then((entries) => {
+      entries.forEach((entry) => {
+        const [lang, ...slug] = entry.id.split('-');
+        entry.data = {
+          ...entry.data,
+          lang,
+          slug: slug.join('-'),
+        };
+      });
+      return entries;
+    })
+    .then((links) =>
+      links
+        .filter((entry) => entry.data.lang === 'es')
+        .filter(
+          (entry) =>
+            entry.data.status.startsWith('published') || !import.meta.env.PROD
+        )
+    );
+
+  const postsPageNumbers = Array.from(
     { length: Math.ceil(posts.length / ITEMS_TO_DISPLAY) },
     (n, i) => i
   );
 
-  return pageNumbers.map((n) => ({ params: { num: n } }));
+  const linksPageNumbers = Array.from(
+    { length: Math.ceil(links.length / ITEMS_TO_DISPLAY) },
+    (n, i) => i
+  );
+
+  return [
+    ...postsPageNumbers.map((n) => ({
+      params: { collection: 'posts', page: n },
+    })),
+    ...linksPageNumbers.map((n) => ({
+      params: { collection: 'links', page: n },
+    })),
+  ];
 }
 
-const allPosts = await getCollection('posts')
+const allContent = await getCollection(Astro.params.collection)
   .then((entries) => {
     entries.forEach((entry) => {
       const [lang, ...slug] = entry.id.split('-');
@@ -51,8 +84,8 @@ const allPosts = await getCollection('posts')
     });
     return entries;
   })
-  .then((posts) =>
-    posts
+  .then((entries) =>
+    entries
       .filter((entry) => entry.data.lang === 'es')
       .filter(
         (entry) =>
@@ -64,11 +97,14 @@ const allPosts = await getCollection('posts')
   );
 
 const pageNumbers = Array.from(
-  { length: Math.ceil(allPosts.length / ITEMS_TO_DISPLAY) },
+  { length: Math.ceil(allContent.length / ITEMS_TO_DISPLAY) },
   (n, i) => i
 );
-const currentPage = parseInt(Astro.params.num, 10);
-const posts = allPosts.splice(currentPage * ITEMS_TO_DISPLAY, ITEMS_TO_DISPLAY);
+const currentPage = parseInt(Astro.params.page, 10);
+const contents = allContent.splice(
+  currentPage * ITEMS_TO_DISPLAY,
+  ITEMS_TO_DISPLAY
+);
 
 const renderDate = (completeDate) => {
   const MONTHS = {
@@ -112,11 +148,14 @@ const renderStatus = (status) => {
 <BaseLayout slug="/blog">
   <div class="grid gap-4 mt-4">
     <div class="grid gap-2">
-      <h2 class="text-2xl font-bold">Posts</h2>
+      <h2 class="text-2xl font-bold">
+        {Astro.params.collection === 'posts' && 'Histórico de posts'}
+        {Astro.params.collection === 'links' && 'Histórico de enlaces'}
+      </h2>
     </div>
     <ul class="grid gap-6">
       {
-        posts.slice(0, 4000).map((content) => (
+        contents.slice(0, 4000).map((content) => (
           <li class="grid md:grid-cols-[200px_1fr] gap-4">
             <img
               src={renderImgSrc(content.data.image, content.data.title)}
@@ -164,7 +203,7 @@ const renderStatus = (status) => {
             <li>
               <a
                 class="text-sm font-medium underline"
-                href={`/blog/posts-${currentPage - 1}`}
+                href={`/blog/${Astro.params.collection}/${currentPage - 1}`}
                 rel="prev"
               >
                 Anterior
@@ -190,7 +229,7 @@ const renderStatus = (status) => {
                 <li>
                   <a
                     class="text-sm font-medium underline"
-                    href={`/blog/posts-${page}`}
+                    href={`/blog/${Astro.params.collection}/${page}`}
                   >
                     {1 + page}
                   </a>
@@ -204,7 +243,7 @@ const renderStatus = (status) => {
             <li>
               <a
                 class="text-sm font-medium underline"
-                href={`/blog/posts-${currentPage + 1}`}
+                href={`/blog/${Astro.params.collection}/${currentPage + 1}`}
                 rel="next"
               >
                 Siguiente

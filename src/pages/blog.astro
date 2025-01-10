@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import { format } from '@formkit/tempo';
 
 const userLang = Astro.currentLocale || 'es';
+const ITEMS_TO_DISPLAY = 3;
 
 const getAllCollectionEntries = (collectionName) => {
   return getCollection(collectionName).then((entries) => {
@@ -47,12 +48,23 @@ const getPublishedPosts = async (lang) => {
   );
 };
 
-const links = [...(await getPublishedLinks(userLang))].toSorted((a, b) =>
+const allLinks = [...(await getPublishedLinks(userLang))].toSorted((a, b) =>
   b.data.date?.edited?.localeCompare(a.data.date?.edited)
 );
-const posts = [...(await getPublishedPosts(userLang))].toSorted((a, b) =>
+const allPosts = [...(await getPublishedPosts(userLang))].toSorted((a, b) =>
   b.data.date?.edited?.localeCompare(a.data.date?.edited)
 );
+
+const linksPageNumbers = Array.from(
+  { length: Math.ceil(allLinks.length / ITEMS_TO_DISPLAY) },
+  (n, i) => i
+);
+
+const postsPageNumbers = Array.from(
+  { length: Math.ceil(allPosts.length / ITEMS_TO_DISPLAY) },
+  (n, i) => i
+);
+
 /*
 // Tags
 
@@ -112,11 +124,11 @@ const renderStatus = (status) => {
 <BaseLayout slug="/blog">
   <div class="grid gap-4 mt-4">
     <div class="grid gap-2">
-      <h2 class="text-2xl font-bold">Posts</h2>
+      <h2 class="text-2xl font-bold">Últimos posts</h2>
     </div>
     <ul class="grid gap-6">
       {
-        posts.slice(0, 4000).map((content) => (
+        allPosts.slice(0, ITEMS_TO_DISPLAY).map((content) => (
           <li class="grid md:grid-cols-[200px_1fr] gap-4">
             <img
               src={renderImgSrc(content.data.image, content.data.title)}
@@ -157,6 +169,142 @@ const renderStatus = (status) => {
         ))
       }
     </ul>
+    <nav class="w-4/5">
+      <ul class="w-full flex items-center justify-center gap-4">
+        {
+          postsPageNumbers.map((page) => {
+            if (page === 0) {
+              return (
+                <li>
+                  <a
+                    class="font-semibold text-sm font-medium hover:underline"
+                    href={`/blog/posts/${page}`}
+                  >
+                    {1 + page}
+                  </a>
+                </li>
+              );
+            } else {
+              return (
+                <li>
+                  <a
+                    class="text-sm font-medium underline"
+                    href={`/blog/posts/${page}`}
+                  >
+                    {1 + page}
+                  </a>
+                </li>
+              );
+            }
+          })
+        }
+        {
+          postsPageNumbers.length > 1 && (
+            <li>
+              <a
+                class="text-sm font-medium underline"
+                href="/blog/posts/1"
+                rel="next"
+              >
+                Siguiente
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
+  </div>
+  <div class="grid gap-4 mt-4">
+    <div class="grid gap-2">
+      <h2 class="text-2xl font-bold">Últimos enlaces</h2>
+    </div>
+    <ul class="grid gap-6">
+      {
+        allLinks.slice(0, ITEMS_TO_DISPLAY).map((content) => (
+          <li class="grid md:grid-cols-[200px_1fr] gap-4">
+            <img
+              src={renderImgSrc(content.data.image, content.data.title)}
+              alt="Blog post cover"
+              width={200}
+              height={150}
+              class="rounded-lg object-cover"
+              style={{ aspectRatio: '200/150', objectFit: 'cover' }}
+            />
+            <div class="space-y-2">
+              <a
+                href={'/' + content.collection + '/' + content.data.slug + '/'}
+                class="cursor-default"
+              >
+                <h3 class="text-xl font-bold">{content.data.title}</h3>
+              </a>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div>{content.data.author}</div>
+                <div
+                  data-orientation="vertical"
+                  role="none"
+                  class="shrink-0 bg-border h-full w-[1px]"
+                  data-id="25"
+                />
+                <div>{renderDate(content.data.date.edited)}</div>
+              </div>
+              <p class="text-muted-foreground line-clamp-3">
+                {content.data.brief}
+              </p>
+              <a
+                href={'/' + content.collection + '/' + content.data.slug + '/'}
+                class="text-primary font-medium hover:underline"
+              >
+                Leer más{renderStatus(content.data.status)}
+              </a>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    <nav class="w-4/5">
+      <ul class="w-full flex items-center justify-center gap-4">
+        {
+          linksPageNumbers.map((page) => {
+            if (page === 0) {
+              return (
+                <li>
+                  <a
+                    class="font-semibold text-sm font-medium hover:underline"
+                    href={`/blog/links/${page}`}
+                  >
+                    {1 + page}
+                  </a>
+                </li>
+              );
+            } else {
+              return (
+                <li>
+                  <a
+                    class="text-sm font-medium underline"
+                    href={`/blog/links/${page}`}
+                  >
+                    {1 + page}
+                  </a>
+                </li>
+              );
+            }
+          })
+        }
+        {
+          linksPageNumbers.length > 1 && (
+            <li>
+              <a
+                class="text-sm font-medium underline"
+                href="/blog/links/1"
+                rel="next"
+              >
+                Siguiente
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
   </div>
   <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
 </BaseLayout>
