@@ -8,5 +8,8 @@ export default defineConfig({
     defaultLocale: 'es',
     locales: ['es', { codes: ['en', 'en_US', 'en_UK'], path: 'english' }],
   },
+  redirects: {
+    '/blog/posts': '/blog/posts-0',
+  },
   integrations: [tailwind()],
 });

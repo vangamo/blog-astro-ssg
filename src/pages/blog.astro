@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { format } from '@formkit/tempo';
+
+const userLang = Astro.currentLocale || 'es';
+
+const getAllCollectionEntries = (collectionName) => {
+  return getCollection(collectionName).then((entries) => {
+    entries.forEach((entry) => {
+      const [lang, ...slug] = entry.id.split('-');
+      entry.data = {
+        ...entry.data,
+        lang,
+        slug: slug.join('-'),
+      };
+    });
+    return entries;
+  });
+};
+
+const getAllLinks = async (lang) => {
+  return await getAllCollectionEntries('links').then((links) =>
+    links.filter((entry) => entry.data.lang === lang)
+  );
+};
+const getAllPosts = async (lang) => {
+  return await getAllCollectionEntries('posts').then((posts) =>
+    posts.filter((entry) => entry.data.lang === lang)
+  );
+};
+
+const getPublishedLinks = async (lang) => {
+  return await getAllLinks(lang).then((links) =>
+    links.filter(
+      (entry) =>
+        entry.data.status.startsWith('published') || !import.meta.env.PROD
+    )
+  );
+};
+const getPublishedPosts = async (lang) => {
+  return await getAllPosts(lang).then((posts) =>
+    posts.filter(
+      (entry) =>
+        entry.data.status.startsWith('published') || !import.meta.env.PROD
+    )
+  );
+};
+
+const links = [...(await getPublishedLinks(userLang))].toSorted((a, b) =>
+  b.data.date?.edited?.localeCompare(a.data.date?.edited)
+);
+const posts = [...(await getPublishedPosts(userLang))].toSorted((a, b) =>
+  b.data.date?.edited?.localeCompare(a.data.date?.edited)
+);
+/*
+// Tags
+
+const tagsCount = {};
+contents.forEach((content) => {
+  content.data.tags.forEach((tag) => {
+    if (!tagsCount[tag]) tagsCount[tag] = new Set();
+    tagsCount[tag].add(content.id);
+  });
+});
+
+const tags = Object.keys(tagsCount).sort(
+  (a, b) => tagsCount[b].size - tagsCount[a].size
+);
+*/
+// Render helpers
+
+const renderDate = (completeDate) => {
+  const MONTHS = {
+    '01': 'enero',
+    '02': 'febrero',
+    '03': 'marzo',
+    '04': 'abril',
+    '05': 'mayo',
+    '06': 'junio',
+    '07': 'julio',
+    '08': 'agosto',
+    '09': 'septiembre',
+    '10': 'octubre',
+    '11': 'noviembre',
+    '12': 'diciembre',
+  };
+  const [date, time] = completeDate.split(' ');
+  const [year, month, day] = date.split('.');
+
+  const dayNumber = parseInt(day, 10);
+
+  return `${dayNumber} de ${MONTHS[month]} de ${year}`;
+};
+
+const renderImgSrc = (imageData, title) => {
+  if (!imageData?.url) {
+    return `https://placehold.co/400x400/999999/dddddd?font=mono&text=${title.substring(0, title.indexOf(' '))}`;
+  }
+
+  return imageData.url;
+};
+
+const renderStatus = (status) => {
+  if (import.meta.env.PROD || status === 'published') {
+    return '';
+  }
+  return ` (${status})`;
+};
+---
+
+<BaseLayout slug="/blog">
+  <div class="grid gap-4 mt-4">
+    <div class="grid gap-2">
+      <h2 class="text-2xl font-bold">Posts</h2>
+    </div>
+    <div class="grid gap-6">
+      {
+        posts.slice(0, 4000).map((content) => (
+          <div class="grid md:grid-cols-[200px_1fr] gap-4">
+            <img
+              src={renderImgSrc(content.data.image, content.data.title)}
+              alt="Blog post cover"
+              width={200}
+              height={150}
+              class="rounded-lg object-cover"
+              style={{ aspectRatio: '200/150', objectFit: 'cover' }}
+            />
+            <div class="space-y-2">
+              <a
+                href={'/' + content.collection + '/' + content.data.slug + '/'}
+                class="cursor-default"
+              >
+                <h3 class="text-xl font-bold">{content.data.title}</h3>
+              </a>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div>{content.data.author}</div>
+                <div
+                  data-orientation="vertical"
+                  role="none"
+                  class="shrink-0 bg-border h-full w-[1px]"
+                  data-id="25"
+                />
+                <div>{renderDate(content.data.date.edited)}</div>
+              </div>
+              <p class="text-muted-foreground line-clamp-3">
+                {content.data.brief}
+              </p>
+              <a
+                href={'/' + content.collection + '/' + content.data.slug + '/'}
+                class="text-primary font-medium hover:underline"
+              >
+                Leer más{renderStatus(content.data.status)}
+              </a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
+</BaseLayout>

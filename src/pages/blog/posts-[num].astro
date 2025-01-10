@@ -1,0 +1,86 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+const locale = Astro.currentLocale;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export const ITEMS_TO_DISPLAY = 3;
+
+/*
+    Astro function to generate a list of valid slugs
+    for post pages
+*/
+export async function getStaticPaths() {
+  const posts = await getCollection('posts')
+    .then((entries) => {
+      entries.forEach((entry) => {
+        const [lang, ...slug] = entry.id.split('-');
+        entry.data = {
+          ...entry.data,
+          lang,
+          slug: slug.join('-'),
+        };
+      });
+      return entries;
+    })
+    .then((posts) =>
+      posts
+        .filter((entry) => entry.data.lang === 'es')
+        .filter(
+          (entry) =>
+            entry.data.status.startsWith('published') || !import.meta.env.PROD
+        )
+    );
+  console.log(posts.length);
+  const pageNumbers = Array.from(
+    { length: Math.ceil(posts.length / ITEMS_TO_DISPLAY) },
+    (n, i) => i
+  );
+
+  return pageNumbers.map((n) => ({ params: { num: n } }));
+  /*
+  return posts
+    .filter((entry) => entry.id.startsWith(locale + '-'))
+    .map((entry) => ({
+      params: {
+        num: entry.id.substring(3),
+      },
+    }));
+*/
+}
+
+const posts = await getCollection('posts')
+  .then((entries) => {
+    entries.forEach((entry) => {
+      const [lang, ...slug] = entry.id.split('-');
+      entry.data = {
+        ...entry.data,
+        lang,
+        slug: slug.join('-'),
+      };
+    });
+    return entries;
+  })
+  .then((posts) =>
+    posts
+      .filter((entry) => entry.data.lang === 'es')
+      .filter(
+        (entry) =>
+          entry.data.status.startsWith('published') || !import.meta.env.PROD
+      )
+      .toSorted((a, b) =>
+        b.data.date?.edited?.localeCompare(a.data.date?.edited)
+      )
+      .splice(Astro.params.num * ITEMS_TO_DISPLAY, ITEMS_TO_DISPLAY)
+  );
+---
+
+<BaseLayout slug="/blog">
+  <div class="grid gap-4 mt-4">
+    <div class="grid gap-2">
+      <h2 class="text-2xl font-bold">Posts</h2>
+    </div>
+  </div>
+  <ul>
+    {posts.map((content) => <li>{content.data.title}</li>)}
+  </ul>
+</BaseLayout>
