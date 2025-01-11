@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/tailwind": "^5.1.4",
     "astro": "^5.1.4",
+    "flexsearch": "^0.7.43",
     "tailwindcss": "^3.4.10"
   },
   "devDependencies": {

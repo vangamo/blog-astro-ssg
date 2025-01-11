@@ -14,6 +14,9 @@ importers:
       astro:
         specifier: ^5.1.4
         version: 5.1.4(jiti@1.21.6)(rollup@4.30.1)(typescript@5.5.4)(yaml@2.5.1)
+      flexsearch:
+        specifier: ^0.7.43
+        version: 0.7.43
       tailwindcss:
         specifier: ^3.4.10
         version: 3.4.10
@@ -977,6 +980,9 @@ packages:
   flattie@1.1.1:
     resolution: {integrity: sha512-9UbaD6XdAL97+k/n+N7JwX46K/M6Zc6KcFYskrYL8wbBV/Uyk0CTAMY0VT+qiK5PM7AIc9aTWYtq65U7T+aCNQ==}
     engines: {node: '>=8'}
+
+  flexsearch@0.7.43:
+    resolution: {integrity: sha512-c5o/+Um8aqCSOXGcZoqZOm+NqtVwNsvVpWv6lfmSclU954O3wvQKxxK8zj74fPaSJbXpSLTs4PRhh+wnoCXnKg==}
 
   foreground-child@3.3.0:
     resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
@@ -2822,6 +2828,8 @@ snapshots:
       pkg-dir: 4.2.0
 
   flattie@1.1.1: {}
+
+  flexsearch@0.7.43: {}
 
   foreground-child@3.3.0:
     dependencies:
