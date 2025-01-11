@@ -2,6 +2,8 @@ import { defineConfig } from 'astro/config';
 
 import tailwind from '@astrojs/tailwind';
 
+import react from '@astrojs/react';
+
 // https://astro.build/config
 export default defineConfig({
   i18n: {
@@ -12,5 +14,5 @@ export default defineConfig({
     '/blog/posts': '/blog/posts/0',
     '/blog/links': '/blog/links/0',
   },
-  integrations: [tailwind()],
+  integrations: [tailwind(), react()],
 });
