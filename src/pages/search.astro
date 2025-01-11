@@ -1,55 +1,8 @@
 ---
-
+import PostsLayout from '../layouts/PostsLayout.astro';
+import SearchComponent from '../components/Search.jsx';
 ---
 
-<html>
-  <body>
-    <main></main>
-    <script>
-      import FlexSearch from 'flexsearch';
-
-      const index = new FlexSearch.Index({
-        preset: 'match',
-        tokenize: 'full',
-        context: true,
-        language: 'es',
-        //  encode: "advanced",
-      });
-
-      fetch('/api/search.json')
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-
-          const keys = Object.keys(data);
-          console.log(keys);
-          keys.forEach(async (key) => {
-            if (key !== 'cnt') {
-              console.log(key);
-              await index.import(key, data[key] ?? null);
-            }
-          });
-
-          console.log(
-            index.search('cómo aprender a programar en javascript', {
-              suggest: true,
-            })
-          );
-
-          const text = 'cómo aprender a programar en javascript';
-
-          document.querySelector('main').innerHTML =
-            '<input type="search" value="' + text + '"/>';
-          const results = index.search(text, {
-            suggest: true,
-          });
-
-          results.forEach((result) => {
-            const link = data.cnt[result];
-            document.querySelector('main').innerHTML +=
-              '<li><a href="' + link + '">' + link + '</a></li>';
-          });
-        });
-    </script>
-  </body>
-</html>
+<PostsLayout lang="es" slug="">
+  <SearchComponent client:load lang="es" />
+</PostsLayout>
