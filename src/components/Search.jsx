@@ -47,13 +47,9 @@ async function importData() {
     response.json()
   );
 
-  console.log(data);
-
   const keys = Object.keys(data);
-  console.log(keys);
   keys.forEach(async (key) => {
     if (key !== "cnt") {
-      console.log(key);
       await index.import(key, data[key] ?? null);
     }
   });
@@ -70,16 +66,10 @@ export default function Search({ lang }) {
 
   useEffect(() => {
     const fetchResults = async () => {
-      console.log("Allá que te va");
       const fetchedPosts = await importData();
-      console.log("Llegó");
 
-      console.log("setPosts");
       setPosts(fetchedPosts);
 
-      console.log("setSearch");
-      console.log(window.location.search);
-      console.dir(new URLSearchParams(window.location.search));
       const queryParams = new URLSearchParams(window.location.search);
       const sanitizedSearchTerm = queryParams
         .get("s")
@@ -93,14 +83,12 @@ export default function Search({ lang }) {
   }, []);
 
   useEffect(() => {
-    console.log("useEffect search", search);
     if ("" !== search) {
       const results = index.search(search, {
         suggest: true,
         limit: 10,
       });
 
-      console.log(results);
       setResults(
         results.filter((r, idx) => !results.slice(idx + 1).includes(r))
       );

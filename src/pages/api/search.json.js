@@ -59,11 +59,6 @@ allPosts.forEach((post, idx) => {
 await index.export((key, value) => {
   exportableData[key] = value;
 });
-console.log('end');
-
-console.log(
-  index.search('cómo aprender a programar en javascript', { suggest: true })
-);
 
 export async function GET({ params, request }) {
   return new Response(JSON.stringify(exportableData));
