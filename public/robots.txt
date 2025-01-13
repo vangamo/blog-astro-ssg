@@ -1,2 +1,16 @@
+# <https://www.robotstxt.org/robotstxt.html>
+# <https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt?hl=es>
+
 User-agent: *
+Allow: /$
+Allow: /index.html
+Allow: /posts/recopilacion-de-retos-de-codigo-de-adviento/
+Allow: /english/
+Allow: /english/posts/what-s-new-with-CSS-in-2024/
+Disallow: /search
+Disallow: /english/search
+Disallow: /tags
+Disallow: /english/tags
 Disallow: /
+
+Sitemap: https://fullstack.igarrido.es/sitemap.xml
