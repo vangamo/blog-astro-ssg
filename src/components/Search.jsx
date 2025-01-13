@@ -47,7 +47,15 @@ export default function Search({ lang }) {
       setPosts(fetchedPosts);
 
       console.log("setSearch");
-      setSearch("Cómo aprender a programar en JavaScript");
+      console.log(window.location.search);
+      console.dir(new URLSearchParams(window.location.search));
+      const queryParams = new URLSearchParams(window.location.search);
+      const sanitizedSearchTerm = queryParams
+        .get("s")
+        .trim()
+        .replace(/\s+/g, " ");
+
+      setSearch(sanitizedSearchTerm);
     };
 
     fetchResults();
