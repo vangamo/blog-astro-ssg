@@ -1,6 +1,6 @@
 import translations from "../i18n/translations.json";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import FlexSearch from "flexsearch";
 
 const index = new FlexSearch.Index({
@@ -57,6 +57,34 @@ async function importData() {
   return data.cnt;
 }
 
+function debounce(callback, delay = 250) {
+  let timeout;
+
+  return (...args) => {
+    const later = () => {
+      console.log("clearTimeout");
+      clearTimeout(timeout);
+      callback(...args);
+    };
+    console.log("setTimeout");
+    clearTimeout(timeout);
+    timeout = setTimeout(later, delay);
+  };
+}
+
+// <https://stackoverflow.com/questions/75556418/how-to-use-debounce-hooks-in-react#answer-75556865>
+
+function useDebounce(callback, delay = 250) {
+  const callbackRef = React.useRef(callback);
+  React.useLayoutEffect(() => {
+    callbackRef.current = callback;
+  });
+  return React.useMemo(
+    () => debounce((...args) => callbackRef.current(...args), delay),
+    [delay]
+  );
+}
+
 export default function Search({ lang }) {
   const [posts, setPosts] = useState([]);
   const [results, setResults] = useState([]);
@@ -82,25 +110,29 @@ export default function Search({ lang }) {
     fetchResults();
   }, []);
 
-  useEffect(() => {
-    if ("" !== search) {
-      const results = index.search(search, {
-        suggest: true,
-        limit: 10,
-      });
+  useEffect(
+    useDebounce(() => {
+      console.log(search);
+      if ("" !== search) {
+        const results = index.search(search, {
+          suggest: true,
+          limit: 10,
+        });
 
-      setResults(
-        results.filter((r, idx) => !results.slice(idx + 1).includes(r))
-      );
-    } else {
-      setResults([]);
-    }
-  }, [search]);
+        setResults(
+          results.filter((r, idx) => !results.slice(idx + 1).includes(r))
+        );
+      } else {
+        setResults([]);
+      }
+    }),
+    [search]
+  );
 
   return (
     <div className="grid gap-4 mt-4">
-      <div class="grid gap-2">
-        <h2 class="text-2xl font-bold">{t["sidebar.Search"]}</h2>
+      <div className="grid gap-2">
+        <h2 className="text-2xl font-bold">{t["sidebar.Search"]}</h2>
         <div className="relative">
           <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"></div>
           <input
@@ -110,7 +142,7 @@ export default function Search({ lang }) {
             type="search"
             value={search}
             onInput={(ev) => {
-              setSearch(ev.currentTarget.value);
+              setSearch(ev.target.value);
             }}
           />
         </div>
@@ -131,49 +163,49 @@ export default function Search({ lang }) {
           </p>
         </div>
       )}
-      <ul class="grid gap-6 mt-4">
+      <ul className="grid gap-6 mt-4">
         {results.map((resultIndex) => {
           const content = {
             data: posts[resultIndex],
             collection: posts[resultIndex].collection,
           };
           return (
-            <li class="grid md:grid-cols-[200px_1fr] gap-4">
+            <li className="grid md:grid-cols-[200px_1fr] gap-4">
               <img
                 src={renderImgSrc(content.data.image, content.data.title)}
                 alt="Blog post cover"
                 width={200}
                 height={150}
-                class="rounded-lg object-cover"
+                className="rounded-lg object-cover"
                 style={{ aspectRatio: "200/150", objectFit: "cover" }}
               />
-              <div class="space-y-2">
+              <div className="space-y-2">
                 <a
                   href={
                     "/" + content.collection + "/" + content.data.slug + "/"
                   }
-                  class="cursor-default"
+                  className="cursor-default"
                 >
-                  <h3 class="text-xl font-bold">{content.data.title}</h3>
+                  <h3 className="text-xl font-bold">{content.data.title}</h3>
                 </a>
-                <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <div>{content.data.author}</div>
                   <div
                     data-orientation="vertical"
                     role="none"
-                    class="shrink-0 bg-border h-full w-[1px]"
+                    className="shrink-0 bg-border h-full w-[1px]"
                     data-id="25"
                   />
                   <div>{renderDate(content.data.date.edited)}</div>
                 </div>
-                <p class="text-muted-foreground line-clamp-3">
+                <p className="text-muted-foreground line-clamp-3">
                   {content.data.brief}
                 </p>
                 <a
                   href={
                     "/" + content.collection + "/" + content.data.slug + "/"
                   }
-                  class="text-primary font-medium hover:underline"
+                  className="text-primary font-medium hover:underline"
                 >
                   Leer más
                 </a>
