@@ -13,4 +13,22 @@ Disallow: /tags
 Disallow: /english/tags
 Disallow: /
 
+# <https://user-agents.net/bots>
+
+User-agent: Googlebot
+User-agent: DuckDuckBot
+User-agent: BingBot
+User-agent: BingPreview
+Allow: /_astro
+Allow: /sitemap.xml
+
+User-agent: Googlebot-Image
+User-agent: GoogleOther-Image
+User-agent: Googlebot
+User-agent: DuckDuckBot
+User-agent: TelegramBot
+User-agent: BingBot
+User-agent: BingPreview
+Allow: /images
+
 Sitemap: https://fullstack.igarrido.es/sitemap.xml
