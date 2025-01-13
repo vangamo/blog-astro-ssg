@@ -1,6 +1,5 @@
 import FlexSearch from 'flexsearch';
 import { getCollection } from 'astro:content';
-import { format } from '@formkit/tempo';
 
 const userLang = 'es'; //Astro.currentLocale || 'es';
 
@@ -48,7 +47,9 @@ const index = new FlexSearch.Index({
 });
 
 allPosts.forEach((post, idx) => {
-  exportableData.cnt.push('/posts/' + post.data.slug);
+  post.data.collection = post.collection;
+  delete post.data.status;
+  exportableData.cnt.push(post.data);
 
   index.add(idx, post.data.title);
   index.append(idx, post.data.tags.join(' '));
