@@ -5,15 +5,7 @@ const locale = Astro.currentLocale;
 const t = translations[locale];
 ---
 
-<!--
 <div class="grid gap-4 mt-4">
-  <h2 class="text-2xl font-bold">{t['sidebar.Categories']}</h2>
-  <div class="grid gap-2">
-    <a href="#" class="text-sm font-medium hover:underline"> {"Category"} </a>
-  </div>
-</div>
--->
-<div class="grid gap-4">
   <h2 class="text-2xl font-bold">{t['sidebar.Tags']}</h2>
   <div class="flex flex-wrap gap-2">
     <a
@@ -22,39 +14,6 @@ const t = translations[locale];
     >
       {'tag'}
     </a>
-
-    <!--
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      React
-    </a>
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      CSS
-    </a>
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      JavaScript
-    </a>
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      Figma
-    </a>
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      Productivity
-    </a>
-  -->
   </div>
 </div>
 <form
