@@ -12,6 +12,7 @@ Disallow: /english/search
 Disallow: /tags
 Disallow: /english/tags
 Disallow: /
+Disallow: /cgi-bin/
 
 # <https://user-agents.net/bots>
 
