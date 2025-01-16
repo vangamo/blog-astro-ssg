@@ -1,7 +1,7 @@
 ---
 import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import translations from '../i18n/translations.json';
-import Logo from '../images/logo.webp';
+import Logo from '../images/logo-28.webp';
 
 const { slug } = Astro.props;
 const locale = Astro.currentLocale;
@@ -14,7 +14,9 @@ const t = translations[locale];
   >
     <a href={getAbsoluteLocaleUrl(locale, '/')} class="flex items-center gap-2">
       <img
-        class="w-6 h-6"
+        class="w-7 h-7"
+        width="28"
+        height="28"
         src={Logo.src}
         alt="Blog logo showing v and G letters"
       />
