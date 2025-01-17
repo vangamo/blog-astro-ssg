@@ -41,50 +41,6 @@ const lang = Astro.currentLocale;
       <Header lang={lang} slug={slug} />
 
       <main class="container py-8 flex-1">
-        <style is:global>
-          main h1 {
-            @apply font-extrabold text-2xl text-balance text-center md:text-left mt-4 mb-16;
-            font-family: 'Space Mono', monospace;
-            --font-monospace: 'Space Mono';
-          }
-          main h2 {
-            @apply font-bold text-xl mt-16 mb-4;
-            font-family: 'Space Mono', monospace;
-            --font-monospace: 'Space Mono';
-          }
-          main p {
-            @apply text-lg overflow-ellipsis text-justify mb-8;
-            text-indent: 2em;
-            hyphens: auto;
-          }
-          main a {
-            @apply text-lg text-primary underline underline-offset-1;
-            overflow-wrap: break-word;
-            text-wrap: balance;
-          }
-          main pre {
-            @apply text-lg overflow-scroll mt-8 mb-8 p-8 border-2;
-            font-family: 'Space Mono', monospace;
-            --font-monospace: 'Space Mono';
-            background-color: #163350 !important;
-            border-top-left-radius: 255px 15px;
-            border-top-right-radius: 15px 225px;
-            border-bottom-right-radius: 225px 15px;
-            border-bottom-left-radius: 15px 255px;
-          }
-
-          main p:not(:has(> a:only-of-type)) a {
-            display: block;
-          }
-          main p:not(:has(> a:only-of-type)) a::before {
-            content: '<';
-            text-decoration-line: none;
-          }
-          main p:not(:has(> a:only-of-type)) a::after {
-            content: '>';
-            text-decoration-line: none;
-          }
-        </style>
         <div class="max-w-2xl mx-auto">
           <slot />
         </div>
