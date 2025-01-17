@@ -1,72 +1,112 @@
 ---
+import { getCollection } from 'astro:content';
 import translations from '../i18n/translations.json';
 
-const locale = Astro.currentLocale;
-const t = translations[locale];
+const userLang = Astro.currentLocale || 'es';
+const t = translations[userLang];
+
+// Retrieve tags
+
+const getAllCollectionEntries = (collectionName) => {
+  return getCollection(collectionName).then(entries => {
+    entries.forEach(entry => {
+      const [lang, ...slug] = entry.id.split('-');
+      entry.data = {
+        ...entry.data,
+        lang,
+        slug: slug.join('-')
+      };
+    });
+    return entries;
+  });
+}
+
+const getAllLinks = async (lang) => {
+  return await getAllCollectionEntries('links').then((links) =>
+      links.filter((entry) => entry.data.lang === lang)
+  );
+};
+const getAllPosts = async (lang) => {
+  return await getAllCollectionEntries('posts').then((posts) =>
+    posts.filter((entry) => entry.data.lang === lang)
+  )
+};
+
+const getPublishedLinks = async (lang) => {
+  return await getAllLinks(lang).then((links) =>
+      links.filter((entry) => entry.data.status.startsWith('published') || !import.meta.env.PROD)
+  );
+};
+const getPublishedPosts = async (lang) => {
+  return await getAllPosts(lang).then((posts) =>
+    posts.filter((entry) => entry.data.status.startsWith('published') || !import.meta.env.PROD)
+  )
+};
+
+
+const links = await getPublishedLinks(userLang);
+const posts = await getPublishedPosts(userLang);
+
+const contents = [...posts, ...links].toSorted((a, b) =>
+  b.data.date?.edited?.localeCompare(a.data.date?.edited)
+);
+
+const tagsCount = {};
+contents.forEach((content) => {
+  content.data.tags.forEach((tag) => {
+    if (!tagsCount[tag]) tagsCount[tag] = new Set();
+    tagsCount[tag].add(content.id);
+  });
+});
+
+const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
 ---
 
-<!--
 <div class="grid gap-4 mt-4">
-  <h2 class="text-2xl font-bold">{t['sidebar.Categories']}</h2>
-  <div class="grid gap-2">
-    <a href="#" class="text-sm font-medium hover:underline"> {"Category"} </a>
-  </div>
-</div>
--->
-<div class="grid gap-4">
   <h2 class="text-2xl font-bold">{t['sidebar.Tags']}</h2>
-  <div class="flex flex-wrap gap-2">
-
-      <a
-      href={"tag"}
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      {"tag"}
-    </a>
-
-    <!--
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      React
-    </a>
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      CSS
-    </a>
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      JavaScript
-    </a>
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      Figma
-    </a>
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
-    >
-      Productivity
-    </a>
-  -->
-  </div>
+  <ul class="flex flex-wrap gap-2">
+    {
+      tags.slice(0, 10).map( (tag) => (
+        <li>
+          <a
+            href={`/blog/tags/${encodeURIComponent(tag.replace(' ', '-'))}`}
+            rel="noindex"
+            title={`Ver un listado de artículos relacionados con ${tag}`}
+            class="inline-flex items-center gap-2 rounded-full bg-muted/20 px-3 py-1 text-sm font-medium hover:bg-muted/30"
+          >
+            {tag}
+          </a>
+        </li>
+    ))}
+    {
+      tags.slice(10).map( (tag) => (
+        <li class="hidden">
+          <a
+            href={`/blog/tags/${encodeURIComponent(tag.replace(' ', '-'))}`}
+            aria-hidden="true"
+            rel="noindex"
+          >
+            {tag}
+          </a>
+        </li>
+    ))}
+    
+  </ul>
 </div>
-<div class="grid gap-4">
+<form
+  class="grid gap-4 js__search_form"
+  method="GET"
+  action="/search"
+  rel="nofollow"
+>
   <h2 class="text-2xl font-bold">{t['sidebar.Search']}</h2>
   <div class="relative">
     <div class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"></div>
     <input
       class="flex h-10 border border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full rounded-lg bg-background pl-8"
       placeholder={t['sidebar.Search.placeholder']}
-      data-id="99"
       type="search"
+      name="s"
     />
   </div>
-</div>
+</form>

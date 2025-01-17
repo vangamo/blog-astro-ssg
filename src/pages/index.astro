@@ -32,12 +32,12 @@ const getAllPosts = async (lang) => {
 
 const getPublishedLinks = async (lang) => {
   return await getAllLinks(lang).then((links) =>
-      links.filter((entry) => entry.data.status.startsWith('published'))
+      links.filter((entry) => entry.data.status.startsWith('published') || !import.meta.env.PROD)
   );
 };
 const getPublishedPosts = async (lang) => {
   return await getAllPosts(lang).then((posts) =>
-    posts.filter((entry) => entry.data.status.startsWith('published'))
+    posts.filter((entry) => entry.data.status.startsWith('published') || !import.meta.env.PROD)
   )
 };
 
@@ -131,18 +131,6 @@ const popularPagePaths = await getPopularPagesFromAnalytics(userLang);
 const popularContents = popularPagePaths.map( path => contents.find(astroContent => path === '/' + astroContent.collection + '/' + astroContent.data.slug) );
 
 
-// Tags
-
-const tagsCount = {};
-contents.forEach((content) => {
-  content.data.tags.forEach((tag) => {
-    if (!tagsCount[tag]) tagsCount[tag] = new Set();
-    tagsCount[tag].add(content.id);
-  });
-});
-
-const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
-
 
 
 // Render helpers
@@ -167,9 +155,16 @@ const renderImgSrc = (imageData, title) => {
   return imageData.url;
 }
 
+const renderStatus = (status) => {
+  if( import.meta.env.PROD || status === 'published' ) {
+    return '';
+  }
+  return ` (${status})`;
+}
+
 ---
 
-<BaseLayout slug="/">
+<BaseLayout slug="/" lang="es" pageTitle="Desarrollo Fullstack para programadoras/es" pageDesc="Descubre cursos, las últimas tendencias y recursos seleccionados para dominar el desarrollo Fullstack.Aprende JavaScript, Python, frameworks y mejores prácticas">
   <div class="grid gap-4 mt-4">
     <div class="grid gap-2">
       <h2 class="text-2xl font-bold">Últimos posts</h2>
@@ -190,7 +185,9 @@ const renderImgSrc = (imageData, title) => {
               style={{ aspectRatio: "200/150", objectFit: "cover" }}
             />
             <div class="space-y-2">
-              <h3 class="text-xl font-bold">{content.data.title}</h3>
+              <a href={'./' + content.collection + '/' + content.data.slug + '/'} class="cursor-default">
+                <h3 class="text-xl font-bold">{content.data.title}</h3>
+              </a>
               <div class="flex items-center gap-2 text-sm text-muted-foreground">
                 <div>{content.data.author}</div>
                 <div
@@ -199,7 +196,7 @@ const renderImgSrc = (imageData, title) => {
                   class="shrink-0 bg-border h-full w-[1px]"
                   data-id="25"
                 />
-                <div>{renderDate(content.data.date.created)}</div>
+                <div>{renderDate(content.data.date.edited)}</div>
               </div>
               <p class="text-muted-foreground line-clamp-3">
                 {content.data.brief}
@@ -208,7 +205,7 @@ const renderImgSrc = (imageData, title) => {
                 href={'./' + content.collection + '/' + content.data.slug + '/'}
                 class="text-primary font-medium hover:underline"
               >
-              Leer más
+              Leer más{renderStatus(content.data.status)}
               </a>
             </div>
           </div>
@@ -247,63 +244,13 @@ const renderImgSrc = (imageData, title) => {
                   data-id="25"
                 >
                 </div>
-                <div>{renderDate(content.data.date.created)}</div>
+                <div>{renderDate(content.data.date.edited)}</div>
               </div>
             </a>
           </div>
           ))}
-
-          <!--
-          <div class="flex items-center gap-4">
-            <div
-              class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-            >
-              2
-            </div>
-            <div class="space-y-1">
-              <h3 class="text-lg font-medium">
-                Mastering Responsive Design with CSS
-              </h3>
-              <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                <div>John Smith</div>
-                <div
-                  data-orientation="vertical"
-                  role="none"
-                  class="shrink-0 bg-border h-full w-[1px]"
-                  data-id="25"
-                >
-                </div>
-                <div>May 15, 2023</div>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center gap-4">
-            <div
-              class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-            >
-              3
-            </div>
-            <div class="space-y-1">
-              <h3 class="text-lg font-medium">
-                Exploring the Future of JavaScript
-              </h3>
-              <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                <div>Sarah Johnson</div>
-                <div
-                  data-orientation="vertical"
-                  role="none"
-                  class="shrink-0 bg-border h-full w-[1px]"
-                  data-id="25"
-                >
-                </div>
-                <div>April 30, 2023</div>
-              </div>
-            </div>
-          </div>
-          -->
         </div>
       </div>
     )}
   </div>
-  <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
 </BaseLayout>

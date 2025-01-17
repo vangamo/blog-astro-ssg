@@ -1,10 +1,11 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Sidebar from '../components/Sidebar.astro';
 import '../styles/global.css';
 
-const { pageTitle, pageDesc, lang, slug } = Astro.props;
+const { pageTitle, slug } = Astro.props;
+
+const lang = Astro.currentLocale;
 ---
 
 <html lang={lang}>
@@ -19,33 +20,16 @@ const { pageTitle, pageDesc, lang, slug } = Astro.props;
 
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-
-    <title>vanGamo blog{pageTitle ? ' | ' + pageTitle : ''}</title>
-    <meta
-      property="og:site_name"
-      content={`vanGamo blog${pageTitle ? ': ' + pageTitle : ''}`}
-      lang={lang}
-    />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="es_ES" />
-    <meta property="og:url" content={`https://fullstack.igarrido.es${slug}`} />
-
-    <meta name="description" content={pageDesc} lang={lang} />
-    <meta property="og:description" content={pageDesc} lang={lang} />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>vanGamo | {pageTitle}</title>
   </head>
   <body class="bg-background">
     <div class="flex flex-col min-h-screen">
       <Header lang={lang} slug={slug} />
 
-      <main
-        class="flex-1 container px-4 md:px-6 py-8 grid md:grid-cols-[3fr_1fr] gap-8"
-      >
-        <div class="space-y-8">
+      <main class="container py-8 flex-1">
+        <div class="max-w-2xl mx-auto">
           <slot />
-        </div>
-        <div class="space-y-8">
-          <Sidebar />
         </div>
       </main>
 

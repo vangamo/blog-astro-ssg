@@ -1,6 +1,6 @@
 {
-  "name": "VanGamo blog",
-  "short_name": "vG Blog",
+  "name": "vanGamo's blog",
+  "short_name": "vG blog",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#f1eadf",
+  "background_color": "#f1eadf",
   "display": "standalone"
 }
