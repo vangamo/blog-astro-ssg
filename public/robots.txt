@@ -1,2 +1,35 @@
+# <https://www.robotstxt.org/robotstxt.html>
+# <https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt?hl=es>
+
 User-agent: *
+Allow: /$
+Allow: /index.html
+Allow: /posts/recopilacion-de-retos-de-codigo-de-adviento/
+Allow: /english/
+Allow: /english/posts/what-s-new-with-CSS-in-2024/
+Disallow: /search
+Disallow: /english/search
+Disallow: /tags
+Disallow: /english/tags
 Disallow: /
+Disallow: /cgi-bin/
+
+# <https://user-agents.net/bots>
+
+User-agent: Googlebot
+User-agent: DuckDuckBot
+User-agent: BingBot
+User-agent: BingPreview
+Allow: /_astro
+Allow: /sitemap.xml
+
+User-agent: Googlebot-Image
+User-agent: GoogleOther-Image
+User-agent: Googlebot
+User-agent: DuckDuckBot
+User-agent: TelegramBot
+User-agent: BingBot
+User-agent: BingPreview
+Allow: /images
+
+Sitemap: https://fullstack.igarrido.es/sitemap.xml
