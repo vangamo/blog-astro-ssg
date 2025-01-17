@@ -131,18 +131,6 @@ const popularPagePaths = await getPopularPagesFromAnalytics(userLang);
 const popularContents = popularPagePaths.map( path => contents.find(astroContent => path === '/' + astroContent.collection + '/' + astroContent.data.slug) );
 
 
-// Tags
-
-const tagsCount = {};
-contents.forEach((content) => {
-  content.data.tags.forEach((tag) => {
-    if (!tagsCount[tag]) tagsCount[tag] = new Set();
-    tagsCount[tag].add(content.id);
-  });
-});
-
-const tags = Object.keys(tagsCount).sort((a,b) => tagsCount[b].size - tagsCount[a].size);
-
 
 
 // Render helpers
@@ -261,58 +249,8 @@ const renderStatus = (status) => {
             </a>
           </div>
           ))}
-
-          <!--
-          <div class="flex items-center gap-4">
-            <div
-              class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-            >
-              2
-            </div>
-            <div class="space-y-1">
-              <h3 class="text-lg font-medium">
-                Mastering Responsive Design with CSS
-              </h3>
-              <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                <div>John Smith</div>
-                <div
-                  data-orientation="vertical"
-                  role="none"
-                  class="shrink-0 bg-border h-full w-[1px]"
-                  data-id="25"
-                >
-                </div>
-                <div>May 15, 2023</div>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center gap-4">
-            <div
-              class="flex-shrink-0 w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center text-2xl font-bold text-muted-foreground"
-            >
-              3
-            </div>
-            <div class="space-y-1">
-              <h3 class="text-lg font-medium">
-                Exploring the Future of JavaScript
-              </h3>
-              <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                <div>Sarah Johnson</div>
-                <div
-                  data-orientation="vertical"
-                  role="none"
-                  class="shrink-0 bg-border h-full w-[1px]"
-                  data-id="25"
-                >
-                </div>
-                <div>April 30, 2023</div>
-              </div>
-            </div>
-          </div>
-          -->
         </div>
       </div>
     )}
   </div>
-  <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
 </BaseLayout>
