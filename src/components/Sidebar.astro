@@ -48,7 +48,7 @@ const links = await getPublishedLinks(userLang);
 const posts = await getPublishedPosts(userLang);
 
 const contents = [...posts, ...links].toSorted((a, b) =>
-  b.data.date?.edited?.localeCompare(a.data.date?.edited)
+  (b.data.date?.published || b.data.date?.edited)?.localeCompare(a.data.date?.published || a.data.date?.edited)
 );
 
 const tagsCount = {};

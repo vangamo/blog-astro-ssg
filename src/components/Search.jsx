@@ -196,7 +196,7 @@ export default function Search({ lang }) {
                     className="shrink-0 bg-border h-full w-[1px]"
                     data-id="25"
                   />
-                  <div>{renderDate(content.data.date.edited)}</div>
+                  <div>{renderDate(content.data.date.published || content.data.date.edited)}</div>
                 </div>
                 <p className="text-muted-foreground line-clamp-3">
                   {content.data.brief}

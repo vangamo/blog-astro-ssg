@@ -49,10 +49,10 @@ const getPublishedPosts = async (lang) => {
 };
 
 const allLinks = [...(await getPublishedLinks(userLang))].toSorted((a, b) =>
-  b.data.date?.edited?.localeCompare(a.data.date?.edited)
+  (b.data.date?.published || b.data.date?.edited)?.localeCompare(a.data.date?.published || a.data.date?.edited)
 );
 const allPosts = [...(await getPublishedPosts(userLang))].toSorted((a, b) =>
-  b.data.date?.edited?.localeCompare(a.data.date?.edited)
+  (b.data.date?.published || b.data.date?.edited)?.localeCompare(a.data.date?.published || a.data.date?.edited)
 );
 
 const linksPageNumbers = Array.from(
@@ -153,7 +153,7 @@ const renderStatus = (status) => {
                   class="shrink-0 bg-border h-full w-[1px]"
                   data-id="25"
                 />
-                <div>{renderDate(content.data.date.edited)}</div>
+                <div>{renderDate(content.data.date.published || content.data.date.edited)}</div>
               </div>
               <p class="text-muted-foreground line-clamp-3">
                 {content.data.brief}
@@ -245,7 +245,7 @@ const renderStatus = (status) => {
                   class="shrink-0 bg-border h-full w-[1px]"
                   data-id="25"
                 />
-                <div>{renderDate(content.data.date.edited)}</div>
+                <div>{renderDate(content.data.date.published || content.data.date.edited)}</div>
               </div>
               <p class="text-muted-foreground line-clamp-3">
                 {content.data.brief}
