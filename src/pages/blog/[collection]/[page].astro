@@ -1,7 +1,7 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
 const locale = Astro.currentLocale;
-import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ListingLayout from '../../../layouts/ListingLayout.astro';
 
 export const ITEMS_TO_DISPLAY = 3;
 
@@ -145,7 +145,7 @@ const renderStatus = (status) => {
 };
 ---
 
-<BaseLayout slug="/blog">
+<ListingLayout slug={`/blog/${Astro.params.collection}`}>
   <div class="grid gap-4 mt-4">
     <div class="grid gap-2">
       <h2 class="text-2xl font-bold">
@@ -255,4 +255,4 @@ const renderStatus = (status) => {
     </nav>
   </div>
   <!--<ul>{tags.map((t) => <li>{t}</li>)}</ul>-->
-</BaseLayout>
+</ListingLayout>
