@@ -159,7 +159,7 @@ export default function Search({ lang }) {
           <p className="mb-2">No hemos encontrado resultados.</p>
           <p>
             Prueba con otra búsqueda o repasa los últimos artículos del{" "}
-            <a href="/blog">blog</a>.
+            <a href="/blog/">blog</a>.
           </p>
         </div>
       )}
