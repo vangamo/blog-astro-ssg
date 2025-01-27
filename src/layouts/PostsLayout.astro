@@ -38,10 +38,28 @@ const lang = Astro.currentLocale;
             font-family: 'Space Mono', monospace;
             --font-monospace: 'Space Mono';
           }
-          main p {
+          main p, main ul, main ol {
             @apply text-lg overflow-ellipsis text-justify mb-8;
             text-indent: 2em;
             hyphens: auto;
+          }
+          main li {
+            text-indent: -2em;
+            padding-left: 4em;            
+          }
+          main ul ul, main ol ul, main ul ol, main ol ol {
+            margin-bottom: 0;
+          }
+          main ul ul li, main ol ul li, main ul ol li, main ol ol li {
+            padding-left: 2em;
+          }
+          main li::before {
+            @apply text-lg font-bold text-primary pr-2;
+          }
+          main ul > li::before {
+            content: '-';
+            content: '\25B9';
+            content: '\22D7';
           }
           main a {
             @apply text-lg text-primary underline underline-offset-1;
@@ -49,14 +67,18 @@ const lang = Astro.currentLocale;
             text-wrap: balance;
           }
           main pre {
-            @apply text-lg overflow-scroll mt-8 mb-8 p-8 border-2;
+            @apply text-lg overflow-auto mt-8 mb-8 p-8 border-2;
             font-family: 'Space Mono', monospace;
             --font-monospace: 'Space Mono';
+            text-indent: 0;
             background-color: #163350 !important;
             border-top-left-radius: 255px 15px;
             border-top-right-radius: 15px 225px;
             border-bottom-right-radius: 225px 15px;
             border-bottom-left-radius: 15px 255px;
+            scrollbar-color: hsl(var(--border)) #163350;
+            scrollbar-width: thin;
+            scrollbar-gutter: stable;
           }
 
           main p:not(:has(> a:only-of-type)) a {
